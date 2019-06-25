@@ -22,7 +22,7 @@ func Test_AddEdge(t *testing.T) {
 func Test_GetEdges(t *testing.T) {
 	node1 := NewNode()
 	node2 := &Node{
-		edges: []INode {node1},
+		edges: []INode{node1},
 	}
 
 	edges := *node2.GetEdges()
