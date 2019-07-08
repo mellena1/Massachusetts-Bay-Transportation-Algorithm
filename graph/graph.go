@@ -9,9 +9,9 @@ import (
 
 // Stop represents an mbta stop
 type Stop struct {
-	ID    string    `json:"id"`
-	Name  string    `json:"name"`
-	Edges []*string `json:"edges"`
+	ID    string   `json:"id"`
+	Name  string   `json:"name"`
+	Edges []string `json:"edges"`
 }
 
 // StopList list of stops
@@ -27,6 +27,8 @@ func init() {
 	if err != nil {
 		log.Fatalf("Could not load file graph.json")
 	}
+
+	StopMap = make(map[string]*Stop, len(StopList))
 
 	for _, stop := range StopList {
 		StopMap[stop.ID] = stop
