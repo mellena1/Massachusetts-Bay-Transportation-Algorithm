@@ -1,0 +1,26 @@
+{
+    "stops": [   
+        {
+            "id": "place-lake",
+            "name": "Boston College",
+            "edgeIDs": [
+                "place-kencl"
+            ]
+        },
+        {
+            "id": "place-kencl",
+            "name": "Kenmore",
+            "edgeIDs": [
+                "place-lake",
+                "place-coecl"
+            ]
+        },
+        {
+            "id": "place-coecl",
+            "name": "Copley",
+            "edgeIDs": [
+                "place-kencl"
+            ]
+        }
+    ]
+}
