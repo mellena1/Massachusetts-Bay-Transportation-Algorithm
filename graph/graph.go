@@ -28,6 +28,9 @@ func init() {
 		log.Fatalf("Could not load file graph.json")
 	}
 
+	for _, stop := range StopList {
+		StopMap[stop.ID] = stop
+	}
 }
 
 // IsEndpoint returns true if the stop is on the end of a line
