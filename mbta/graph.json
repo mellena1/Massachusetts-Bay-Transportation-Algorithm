@@ -1,66 +1,64 @@
-{
-    "stops": [   
-        {
-            "id": "place-lake",
-            "name": "Boston College",
-            "edgeIDs": [
-                "place-kencl"
-            ]
-        },
-        {
-            "id": "place-kencl",
-            "name": "Kenmore",
-            "edgeIDs": [
-                "place-lake",
-                "place-coecl"
-            ]
-        },
-        {
-            "id": "place-coecl",
-            "name": "Copley",
-            "edgeIDs": [
-                "place-kencl",
-                "place-pktrm"
-            ]
-        },
-        {
-            "id": "place-pktrm",
-            "name": "Park Street",
-            "edgeIDs": [
-                "place-coecl",
-                "place-gover"
-            ]
-        },
-        {
-            "id": "place-gover",
-            "name": "Government Center",
-            "edgeIDs": [
-                "place-pktrm",
-                "place-haecl"
-            ]
-        },
-        {
-            "id": "place-haecl",
-            "name": "Haymarket",
-            "edgeIDs": [
-                "place-gover",
-                "place-north"
-            ]
-        },
-        {
-            "id": "place-north",
-            "name": "North Station",
-            "edgeIDs": [
-                "place-haecl",
-                "place-lech"
-            ]
-        },
-        {
-            "id": "place-lech",
-            "name": "Lechmere",
-            "edgeIDs": [
-                "place-north"
-            ]
-        }
-    ]
-}
+[   
+    {
+        "id": "place-lake",
+        "name": "Boston College",
+        "edgeIDs": [
+            "place-kencl"
+        ]
+    },
+    {
+        "id": "place-kencl",
+        "name": "Kenmore",
+        "edgeIDs": [
+            "place-lake",
+            "place-coecl"
+        ]
+    },
+    {
+        "id": "place-coecl",
+        "name": "Copley",
+        "edgeIDs": [
+            "place-kencl",
+            "place-pktrm"
+        ]
+    },
+    {
+        "id": "place-pktrm",
+        "name": "Park Street",
+        "edgeIDs": [
+            "place-coecl",
+            "place-gover"
+        ]
+    },
+    {
+        "id": "place-gover",
+        "name": "Government Center",
+        "edgeIDs": [
+            "place-pktrm",
+            "place-haecl"
+        ]
+    },
+    {
+        "id": "place-haecl",
+        "name": "Haymarket",
+        "edgeIDs": [
+            "place-gover",
+            "place-north"
+        ]
+    },
+    {
+        "id": "place-north",
+        "name": "North Station",
+        "edgeIDs": [
+            "place-haecl",
+            "place-lech"
+        ]
+    },
+    {
+        "id": "place-lech",
+        "name": "Lechmere",
+        "edgeIDs": [
+            "place-north"
+        ]
+    }
+]
