@@ -2,14 +2,14 @@
     {
         "id": "place-lake",
         "name": "Boston College",
-        "edgeIDs": [
+        "edges": [
             "place-kencl"
         ]
     },
     {
         "id": "place-kencl",
         "name": "Kenmore",
-        "edgeIDs": [
+        "edges": [
             "place-lake",
             "place-coecl"
         ]
@@ -17,7 +17,7 @@
     {
         "id": "place-coecl",
         "name": "Copley",
-        "edgeIDs": [
+        "edges": [
             "place-kencl",
             "place-pktrm"
         ]
@@ -25,77 +25,155 @@
     {
         "id": "place-pktrm",
         "name": "Park Street",
-        "edgeIDs": [
+        "edges": [
             "place-coecl",
-            "place-gover"
+            "place-gover",
+            "place-dwnxg",
+            "place-alfcl"
         ]
     },
     {
         "id": "place-gover",
         "name": "Government Center",
-        "edgeIDs": [
+        "edges": [
             "place-pktrm",
-            "place-haecl"
+            "place-haecl",
+            "place-bomnl",
+            "place-state"
         ]
     },
     {
         "id": "place-haecl",
         "name": "Haymarket",
-        "edgeIDs": [
+        "edges": [
             "place-gover",
-            "place-north"
+            "place-north",
+            "place-state"
         ]
     },
     {
         "id": "place-north",
         "name": "North Station",
-        "edgeIDs": [
+        "edges": [
             "place-haecl",
-            "place-lech"
+            "place-lech",
+            "place-ogmn"
         ]
     },
     {
         "id": "place-lech",
         "name": "Lechmere",
-        "edgeIDs": [
+        "edges": [
             "place-north"
         ]
     },
     {
         "id": "place-clmnl",
         "name": "Cleveland Circle",
-        "edgeIDs": [
+        "edges": [
             "place-kencl"
         ]
     },
     {
         "id": "place-river",
         "name": "Riverside",
-        "edgeIDs": [
+        "edges": [
             "place-kencl"
         ]
     },
     {
         "id": "place-hsmnl",
         "name": "Heath Street",
-        "edgeIDs": [
+        "edges": [
             "place-coecl"
         ]
     },
 
+
+
+
     {
         "id": "place-forhl",
         "name": "Forest Hills",
-        "edgeIDs": [
+        "edges": [
             "place-dwnxg"
         ]
     },
     {
         "id": "place-dwnxg",
         "name": "Downtown Crossing",
-        "edgeIDs": [
+        "edges": [
             "place-forhl",
-            "plac"
+            "place-state",
+            "place-pktrm",
+            "place-jfk"
+        ]
+    },
+    {
+        "id": "place-ogmn",
+        "name": "Oak Grove",
+        "edges": [
+            "place-north"
+        ]
+    },
+
+
+
+    
+    {
+        "id": "place-alfcl",
+        "name": "Alewife",
+        "edges": [
+            "place-pktrm"
+        ]
+    },
+    {
+        "id": "place-jfk",
+        "name": "JFK/UMass",
+        "edges": [
+            "place-dwnxg",
+            "place-brntn",
+            "place-matt"
+        ]
+    },
+    {
+        "id": "place-brntn",
+        "name": "Braintree",
+        "edges": [
+            "place-jfk"
+        ]
+    },
+    {
+        "id": "place-matt",
+        "name": "Mattapan",
+        "edges": [
+            "place-jfk"
+        ]
+    },
+
+
+
+
+    {
+        "id": "place-bomnl",
+        "name": "Bowdoin",
+        "edges": [
+            "place-gover"
+        ]
+    },
+    {
+        "id": "place-state",
+        "name": "State",
+        "edges": [
+            "place-gover",
+            "place-wondl"
+        ]  
+    },
+    {
+        "id": "place-wondl",
+        "name": "Wonderland",
+        "edges": [
+            "place-state"
         ]
     }
 ]
