@@ -16,7 +16,7 @@ type IStation interface {
 // Station represents an mbta train station
 type Station struct {
 	Node
-	id string
+	mbtaClient.Stop
 }
 
 // IGetID defines a function for returning a station's id
@@ -26,7 +26,7 @@ type IGetID interface {
 
 // GetID returns a station's id
 func (s *Station) GetID() string {
-	return s.id
+	return s.Stop.ID
 }
 
 // ISetID defines a function to set a station's id
@@ -36,7 +36,7 @@ type ISetID interface {
 
 // SetID updates a station's id
 func (s *Station) SetID(id string) {
-	s.id = id
+	s.Stop.ID = id
 }
 
 // IGetNextTrain defines a function that gets the next train to enter this station
