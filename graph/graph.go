@@ -15,10 +15,10 @@ type Stop struct {
 }
 
 // StopList list of stops
-var StopList []Stop
+var StopList []*Stop
 
 // StopMap map of stop IDs to Stops
-var StopMap map[string]Stop
+var StopMap map[string]*Stop
 
 func init() {
 	var err error
@@ -43,7 +43,7 @@ func (s *Stop) IsIntersection() bool {
 	return len(s.Edges) > 1
 }
 
-func importGraph(filename string) ([]Stop, error) {
+func importGraph(filename string) ([]*Stop, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func importGraph(filename string) ([]Stop, error) {
 		return nil, err
 	}
 
-	var stops []Stop
+	var stops []*Stop
 	json.Unmarshal(bytes, &stops)
 	return stops, nil
 }
