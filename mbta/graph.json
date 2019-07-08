@@ -81,5 +81,21 @@
         "edgeIDs": [
             "place-coecl"
         ]
+    },
+
+    {
+        "id": "place-forhl",
+        "name": "Forest Hills",
+        "edgeIDs": [
+            "place-dwnxg"
+        ]
+    },
+    {
+        "id": "place-dwnxg",
+        "name": "Downtown Crossing",
+        "edgeIDs": [
+            "place-forhl",
+            "plac"
+        ]
     }
 ]
