@@ -60,5 +60,26 @@
         "edgeIDs": [
             "place-north"
         ]
+    },
+    {
+        "id": "place-clmnl",
+        "name": "Cleveland Circle",
+        "edgeIDs": [
+            "place-kencl"
+        ]
+    },
+    {
+        "id": "place-river",
+        "name": "Riverside",
+        "edgeIDs": [
+            "place-kencl"
+        ]
+    },
+    {
+        "id": "place-hsmnl",
+        "name": "Heath Street",
+        "edgeIDs": [
+            "place-coecl"
+        ]
     }
 ]
