@@ -10,38 +10,44 @@ import (
 type Simulation struct {
 	Channel     chan SimData
 	Data        SimData
+	LastStop    *graph.Stop
 	CurrentlyAt *graph.Stop
 	GoingTo     *graph.Stop
 	WG          *sync.WaitGroup
 	// Vehicle     *Vehicle
 }
 
-func (s *Simulation) ArriveAtStation(arrivedAt *graph.Stop) {
+// ArriveAtStop update simulation to being at the new Stop and add it to the path
+func (s *Simulation) ArriveAtStop(arrivedAt *graph.Stop) {
+	s.LastStop = s.CurrentlyAt
 	s.CurrentlyAt = arrivedAt
 	s.Data.Stops.ArriveAtStop(arrivedAt)
 }
 
-func (s *Simulation) spawnNewSimulations(curStop *graph.Stop) {
-	newSims := []Simulation{}
+func (s *Simulation) createNewIntersectionSimulations() []*Simulation {
+	newSims := []*Simulation{}
+	curStop := s.CurrentlyAt
+
 	for _, nextStopID := range curStop.Edges {
 		nextStop := graph.StopMap[nextStopID]
+		if nextStop == s.LastStop { // Don't go backwards to avoid cycle issues
+			continue
+		}
 		if !s.doneWithPath(nextStop) {
 			newSim := Simulation{
 				Channel:     s.Channel,
 				Data:        s.Data,
+				LastStop:    s.LastStop,
 				CurrentlyAt: curStop,
 				GoingTo:     nextStop,
 				WG:          s.WG,
 			}
 			newSim.Data.Stops = CloneStopList(s.Data.Stops)
-			newSims = append(newSims, newSim)
+			newSims = append(newSims, &newSim)
 		}
 	}
 
-	for _, newSim := range newSims {
-		s.WG.Add(1)
-		go newSim.Run()
-	}
+	return newSims
 }
 
 func (s *Simulation) doneWithPath(stop *graph.Stop) bool {
@@ -96,7 +102,7 @@ func (s *Simulation) Run() {
 		// TODO: if train now at dest station
 		if true {
 			curStation := s.GoingTo
-			s.ArriveAtStation(curStation)
+			s.ArriveAtStop(curStation)
 
 			if s.Data.Stops.HasVisitedAllStops() {
 				s.Channel <- s.Data
@@ -104,7 +110,11 @@ func (s *Simulation) Run() {
 			}
 
 			if curStation.IsIntersection() {
-				s.spawnNewSimulations(curStation)
+				newSims := s.createNewIntersectionSimulations()
+				for _, newSim := range newSims {
+					s.WG.Add(1)
+					go newSim.Run()
+				}
 				return
 			}
 			s.GoingTo = graph.StopMap[curStation.Edges[0]]

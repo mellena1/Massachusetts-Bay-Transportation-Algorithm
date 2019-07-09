@@ -10,14 +10,16 @@
         "id": "place-kencl",
         "name": "Kenmore",
         "edges": [
-            "place-gover"
+            "place-gover",
+            "place-coecl"
         ]
     },
     {
         "id": "place-coecl",
         "name": "Copley",
         "edges": [
-            "place-gover"
+            "place-gover",
+            "place-kencl"
         ]
     },
     {

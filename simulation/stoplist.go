@@ -22,6 +22,7 @@ func NewStopList(allStops []*graph.Stop, firstStop *graph.Stop) *StopList {
 	return sl
 }
 
+// CloneStopList creates a new StopList with the accessedStops and Path both cloned, but same allStops as it is never edited
 func CloneStopList(sl *StopList) *StopList {
 	accessedStops := make(map[*graph.Stop]bool, len(sl.AccessedStops))
 	for k, v := range sl.AccessedStops {

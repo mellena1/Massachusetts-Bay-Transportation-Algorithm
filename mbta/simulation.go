@@ -1,5 +1,0 @@
-package mbta
-
-func main() {
-
-}
