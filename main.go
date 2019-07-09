@@ -24,7 +24,7 @@ func main() {
 					write data to db/file
 	*/
 
-	graph.InitPackage("graph copy.json")
+	graph.InitPackage("graph cycle.json")
 
 	dataChannel := make(chan simulation.SimData)
 	var wg sync.WaitGroup

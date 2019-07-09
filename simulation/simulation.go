@@ -53,11 +53,12 @@ func (s *Simulation) createNewIntersectionSimulations() []*Simulation {
 func (s *Simulation) doneWithPath(stop *graph.Stop, lastStop *graph.Stop) bool {
 	visited := make(map[*graph.Stop]bool)
 
-	var dfs func(stop *graph.Stop, lastStop *graph.Stop) bool
-	dfs = func(stop *graph.Stop, lastStop *graph.Stop) bool {
+	var dfs func(stop *graph.Stop, lastStop *graph.Stop) ([]*graph.Stop, bool)
+	dfs = func(stop *graph.Stop, lastStop *graph.Stop) ([]*graph.Stop, bool) {
 		visited[stop] = true
 		if !s.Data.Stops.HasVisited(stop) {
-			return false
+			pathTaken := []*graph.Stop{stop}
+			return pathTaken, false
 		}
 		for _, nextStopID := range stop.Edges {
 			nextStop := graph.StopMap[nextStopID]
@@ -67,14 +68,30 @@ func (s *Simulation) doneWithPath(stop *graph.Stop, lastStop *graph.Stop) bool {
 			if visited[nextStop] {
 				continue
 			}
-			if !dfs(nextStop, stop) {
-				return false
+			if pathTaken, visited := dfs(nextStop, stop); !visited {
+				return append(pathTaken, stop), false
 			}
 		}
+		return nil, true
+	}
+
+	pathTaken, done := dfs(stop, lastStop)
+	if done || isCycleInPath(pathTaken) {
 		return true
 	}
 
-	return dfs(stop, lastStop)
+	return false
+}
+
+func isCycleInPath(path []*graph.Stop) bool {
+	visited := make(map[*graph.Stop]bool)
+	for _, stop := range path {
+		if visited[stop] {
+			return true
+		}
+		visited[stop] = true
+	}
+	return false
 }
 
 /*
