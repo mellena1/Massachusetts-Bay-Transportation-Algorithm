@@ -1,4 +1,4 @@
-[   
+[
     {
         "id": "place-lake",
         "name": "Boston College",
@@ -11,7 +11,9 @@
         "name": "Kenmore",
         "edges": [
             "place-lake",
-            "place-coecl"
+            "place-coecl",
+            "place-clmnl",
+            "place-river"
         ]
     },
     {
@@ -19,7 +21,8 @@
         "name": "Copley",
         "edges": [
             "place-kencl",
-            "place-pktrm"
+            "place-pktrm",
+            "place-hsmnl"
         ]
     },
     {
@@ -57,7 +60,7 @@
         "edges": [
             "place-haecl",
             "place-lech",
-            "place-ogmn"
+            "place-ogmnl"
         ]
     },
     {
@@ -88,10 +91,6 @@
             "place-coecl"
         ]
     },
-
-
-
-
     {
         "id": "place-forhl",
         "name": "Forest Hills",
@@ -110,16 +109,12 @@
         ]
     },
     {
-        "id": "place-ogmn",
+        "id": "place-ogmnl",
         "name": "Oak Grove",
         "edges": [
             "place-north"
         ]
     },
-
-
-
-    
     {
         "id": "place-alfcl",
         "name": "Alewife",
@@ -150,10 +145,6 @@
             "place-jfk"
         ]
     },
-
-
-
-
     {
         "id": "place-bomnl",
         "name": "Bowdoin",
@@ -167,7 +158,7 @@
         "edges": [
             "place-gover",
             "place-wondl"
-        ]  
+        ]
     },
     {
         "id": "place-wondl",
