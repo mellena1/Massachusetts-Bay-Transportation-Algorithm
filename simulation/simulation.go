@@ -22,9 +22,10 @@ func (s *Simulation) ArriveAtStation(arrivedAt *graph.Stop) {
 }
 
 func (s *Simulation) spawnNewSimulations(curStop *graph.Stop) {
+	newSims := []Simulation{}
 	for _, nextStopID := range curStop.Edges {
 		nextStop := graph.StopMap[nextStopID]
-		if !s.doneWithPath(nextStop, curStop) {
+		if !s.doneWithPath(nextStop) {
 			newSim := Simulation{
 				Channel:     s.Channel,
 				Data:        s.Data,
@@ -33,24 +34,39 @@ func (s *Simulation) spawnNewSimulations(curStop *graph.Stop) {
 				WG:          s.WG,
 			}
 			newSim.Data.Stops = CloneStopList(s.Data.Stops)
-			go newSim.Run()
+			newSims = append(newSims, newSim)
 		}
+	}
+
+	for _, newSim := range newSims {
+		s.WG.Add(1)
+		go newSim.Run()
 	}
 }
 
-func (s *Simulation) doneWithPath(stop *graph.Stop, lastStop *graph.Stop) bool {
-	if !s.Data.Stops.HasVisited(stop) {
-		return false
-	}
-	for _, nextStop := range stop.Edges {
-		if graph.StopMap[nextStop] == lastStop {
-			continue
-		}
-		if !s.doneWithPath(graph.StopMap[nextStop], stop) {
+func (s *Simulation) doneWithPath(stop *graph.Stop) bool {
+	visited := make(map[*graph.Stop]bool)
+	// visited[stop] = true
+
+	var dfs func(stop *graph.Stop) bool
+	dfs = func(stop *graph.Stop) bool {
+		visited[stop] = true
+		if !s.Data.Stops.HasVisited(stop) {
 			return false
 		}
+		for _, nextStopID := range stop.Edges {
+			nextStop := graph.StopMap[nextStopID]
+			if visited[nextStop] {
+				continue
+			}
+			if !dfs(nextStop) {
+				return false
+			}
+		}
+		return true
 	}
-	return true
+
+	return dfs(stop)
 }
 
 /*
@@ -70,7 +86,7 @@ func (s *Simulation) doneWithPath(stop *graph.Stop, lastStop *graph.Stop) bool {
 // make sure to run this in a goroutine like:
 // go s.Run()
 func (s *Simulation) Run() {
-	s.WG.Add(1)
+	defer s.WG.Done()
 	for {
 		// TODO:
 		// if s.Vehicle == nil {
@@ -83,18 +99,15 @@ func (s *Simulation) Run() {
 			s.ArriveAtStation(curStation)
 
 			if s.Data.Stops.HasVisitedAllStops() {
-				break
+				s.Channel <- s.Data
+				return
 			}
 
 			if curStation.IsIntersection() {
 				s.spawnNewSimulations(curStation)
-				s.WG.Done()
 				return
 			}
 			s.GoingTo = graph.StopMap[curStation.Edges[0]]
 		}
 	}
-
-	s.Channel <- s.Data
-	s.WG.Done()
 }

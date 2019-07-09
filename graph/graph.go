@@ -23,7 +23,7 @@ var StopMap map[string]*Stop
 func init() {
 	var err error
 
-	StopList, err = importGraph("graph.json")
+	StopList, err = importGraph("graph copy.json")
 	if err != nil {
 		log.Fatalf("Could not load file graph.json")
 	}

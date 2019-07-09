@@ -12,12 +12,14 @@ type StopList struct {
 }
 
 // NewStopList makes a new StopList given all stops
-func NewStopList(allStops []*graph.Stop) *StopList {
-	return &StopList{
+func NewStopList(allStops []*graph.Stop, firstStop *graph.Stop) *StopList {
+	sl := &StopList{
 		AccessedStops: make(map[*graph.Stop]bool),
 		Path:          []*graph.Stop{},
 		allStops:      allStops,
 	}
+	sl.ArriveAtStop(firstStop)
+	return sl
 }
 
 func CloneStopList(sl *StopList) *StopList {

@@ -32,32 +32,25 @@ func main() {
 		sim := simulation.Simulation{
 			Channel: dataChannel,
 			Data: simulation.SimData{
-				Stops: simulation.NewStopList(graph.StopList),
+				Stops: simulation.NewStopList(graph.StopList, stop),
 			},
 			CurrentlyAt: stop,
 			GoingTo:     graph.StopMap[stop.Edges[0]],
 			WG:          &wg,
 		}
+		wg.Add(1)
 		go sim.Run()
 	}
-	// wg.Wait()
+	go func() {
+		wg.Wait()
+		close(dataChannel)
+	}()
 
-	// x := 0
-	// for {
-	// 	_, ok := <-dataChannel
-	// 	if !ok {
-	// 		break
-	// 	}
-	// 	x++
-	// }
-	// fmt.Println(x)
-
-	n := 0
+	x := 0
 	for range dataChannel {
-		n++
-		fmt.Println(n)
-		panic("hi")
+		x++
 	}
+	fmt.Println(x)
 }
 
 func getEndpoints() []*graph.Stop {
