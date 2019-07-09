@@ -26,7 +26,7 @@ with open("../graph.json", 'r') as json_file:
     print("Edges of graph: ")
     print(graph.edges)
     
-    nx.draw(graph, with_labels=True, pos=pos)
+    nx.draw(graph, with_labels=True)
     plt.savefig("graph.png")  # save as png
     plt.show()
         
