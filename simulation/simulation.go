@@ -33,7 +33,7 @@ func (s *Simulation) createNewIntersectionSimulations() []*Simulation {
 		if nextStop == s.LastStop { // Don't go backwards to avoid cycle issues
 			continue
 		}
-		if !s.doneWithPath(nextStop) {
+		if !s.doneWithPath(nextStop, curStop) {
 			newSim := Simulation{
 				Channel:     s.Channel,
 				Data:        s.Data,
@@ -50,29 +50,31 @@ func (s *Simulation) createNewIntersectionSimulations() []*Simulation {
 	return newSims
 }
 
-func (s *Simulation) doneWithPath(stop *graph.Stop) bool {
+func (s *Simulation) doneWithPath(stop *graph.Stop, lastStop *graph.Stop) bool {
 	visited := make(map[*graph.Stop]bool)
-	// visited[stop] = true
 
-	var dfs func(stop *graph.Stop) bool
-	dfs = func(stop *graph.Stop) bool {
+	var dfs func(stop *graph.Stop, lastStop *graph.Stop) bool
+	dfs = func(stop *graph.Stop, lastStop *graph.Stop) bool {
 		visited[stop] = true
 		if !s.Data.Stops.HasVisited(stop) {
 			return false
 		}
 		for _, nextStopID := range stop.Edges {
 			nextStop := graph.StopMap[nextStopID]
+			if nextStop == lastStop {
+				continue
+			}
 			if visited[nextStop] {
 				continue
 			}
-			if !dfs(nextStop) {
+			if !dfs(nextStop, stop) {
 				return false
 			}
 		}
 		return true
 	}
 
-	return dfs(stop)
+	return dfs(stop, lastStop)
 }
 
 /*
