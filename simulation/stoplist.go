@@ -40,7 +40,7 @@ func CloneStopList(sl *StopList) *StopList {
 }
 
 // ArriveAtStop log that a stop has been arrived at
-func (sl StopList) ArriveAtStop(stop *graph.Stop) {
+func (sl *StopList) ArriveAtStop(stop *graph.Stop) {
 	if _, exists := sl.AccessedStops[stop]; !exists {
 		sl.AccessedStops[stop] = true
 	}
@@ -49,12 +49,12 @@ func (sl StopList) ArriveAtStop(stop *graph.Stop) {
 }
 
 // HasVisited returns true if the stop has been visited
-func (sl StopList) HasVisited(stop *graph.Stop) bool {
+func (sl *StopList) HasVisited(stop *graph.Stop) bool {
 	_, visited := sl.AccessedStops[stop]
 	return visited
 }
 
 // HasVisitedAllStops returns true if all stops have been visited
-func (sl StopList) HasVisitedAllStops() bool {
+func (sl *StopList) HasVisitedAllStops() bool {
 	return len(sl.AccessedStops) == len(sl.allStops)
 }
