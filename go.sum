@@ -4,5 +4,6 @@ github.com/mellena1/go.jsonapi v0.0.0-20190605213741-fed8aaea31f6 h1:l7hGswrgIy6
 github.com/mellena1/go.jsonapi v0.0.0-20190605213741-fed8aaea31f6/go.mod h1:MlQRSrjWACKSkiy17QZ9ir65rZDK3bgNhH4z9KZVYHw=
 github.com/mellena1/mbta-v3-go v0.0.0-20190610225830-87ab57bfcb6f h1:mclxd0xWTwss/XWfhrzTa+2oceE7ovYigroHqQN1Lzk=
 github.com/mellena1/mbta-v3-go v0.0.0-20190610225830-87ab57bfcb6f/go.mod h1:gNv08KsqRWvDP9dcNMMteJFs2bTfpWDJ1tZg66E2Zpw=
+github.com/mellena1/mbta-v3-go v0.0.0-20190708162129-2452ecf35b88 h1:NP/KXS4pji3d+dOWU+TnpMXdEJBGAxQNuO04PlrS04o=
 golang.org/x/xerrors v0.0.0-20190513163551-3ee3066db522 h1:bhOzK9QyoD0ogCnFro1m2mz41+Ib0oOhfJnBp5MR4K4=
 golang.org/x/xerrors v0.0.0-20190513163551-3ee3066db522/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
