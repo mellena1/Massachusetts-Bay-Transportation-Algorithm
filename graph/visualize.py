@@ -11,8 +11,8 @@ with open("../graph.json", 'r') as json_file:
     for station in data:
         station_id = station['id']
         station_name = station['name']
+        
         station_map[station_id] = station_name
-
         graph.add_node(station_name)
     
     for station in data:
@@ -21,13 +21,10 @@ with open("../graph.json", 'r') as json_file:
             v_name = station_map[edge]
             graph.add_edge(u_name, v_name)
     
-    print("Nodes of graph: ")
-    print(graph.nodes)
-    print("Edges of graph: ")
-    print(graph.edges)
+    print("Nodes of graph: " + str(graph.nodes))
+    print("Edges of graph: " + str(graph.edges))
     
     nx.draw(graph, with_labels=True)
     plt.savefig("graph.png")  # save as png
     plt.show()
         
-    
