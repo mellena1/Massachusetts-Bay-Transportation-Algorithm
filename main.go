@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 	"sync"
+	"time"
 
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/graph"
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/simulation"
@@ -24,7 +27,7 @@ func main() {
 					write data to db/file
 	*/
 
-	graph.InitPackage("graph cycle.json")
+	graph.InitPackage("graph copy.json")
 
 	dataChannel := make(chan simulation.SimData)
 	var wg sync.WaitGroup
@@ -34,7 +37,8 @@ func main() {
 		sim := simulation.Simulation{
 			Channel: dataChannel,
 			Data: simulation.SimData{
-				Stops: simulation.NewStopList(graph.StopList, stop),
+				StartTime: time.Now(),
+				Stops:     simulation.NewStopList(graph.StopList, stop),
 			},
 			CurrentlyAt: stop,
 			GoingTo:     graph.StopMap[stop.Edges[0]],
@@ -49,8 +53,12 @@ func main() {
 	}()
 
 	x := 0
-	for range dataChannel {
+	for data := range dataChannel {
 		x++
+		err := simulation.ExportRoute(data, "test/route"+strconv.Itoa(x))
+		if err != nil {
+			log.Fatalf("Could not export route.")
+		}
 	}
 	fmt.Println(x)
 }
