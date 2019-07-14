@@ -17,7 +17,7 @@ var numberOfRoutes int64
 func FindBestRoute(stops []string, startTime time.Time) ([]string, time.Duration) {
 	if mapsClient == nil {
 		var err error
-		mapsClient, err = maps.NewClient(maps.WithAPIKey("Totally Real API Key"))
+		mapsClient, err = maps.NewClient(maps.WithAPIKey("Sad Cuz Bad"))
 		if err != nil {
 			log.Fatalf("fatal error: %s", err)
 		}
@@ -37,6 +37,7 @@ func findBestRouteHelper(curRoute []string, stopsLeft []string) ([]string, time.
 
 	var bestRoute []string
 	var bestDuration time.Duration
+	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
 	for i := range stopsLeft {
 		route, duration := findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
@@ -50,24 +51,27 @@ func findBestRouteHelper(curRoute []string, stopsLeft []string) ([]string, time.
 }
 
 func removeIndex(index int, list []string) []string {
-	list[index] = list[len(list)-1]
-	return list[:len(list)-1]
+	newList := make([]string, 0)
+	newList = append(newList, list[:index]...)
+	newList = append(newList, list[index+1:]...)
+	return newList
 }
 
 func findRouteTime(route []string) time.Duration {
-	startTime := startTimeForRoutes.UTC().Second()
+	startTime := startTimeForRoutes.Unix()
 	var duration time.Duration
+	duration = 0
 	for i := 0; i < len(route)-1; i++ {
-		duration += findEdgeTime(route[i], route[i+1], startTime+int(duration))
+		duration += findEdgeTime(route[i], route[i+1], startTime+int64(duration))
 	}
 	return duration
 }
 
-func findEdgeTime(stopA string, stopB string, startTime int) time.Duration {
+func findEdgeTime(stopA string, stopB string, startTime int64) time.Duration {
 	req := &maps.DistanceMatrixRequest{
 		Origins:       []string{stopA},
 		Destinations:  []string{stopB},
-		DepartureTime: strconv.Itoa(startTime),
+		DepartureTime: strconv.FormatInt(startTime, 10),
 		Mode:          maps.TravelModeTransit,
 		TransitMode: []maps.TransitMode{
 			maps.TransitModeRail,
@@ -83,5 +87,12 @@ func findEdgeTime(stopA string, stopB string, startTime int) time.Duration {
 	}
 
 	duration := resp.Rows[0].Elements[0].Duration
+	durationInTraffic := resp.Rows[0].Elements[0].DurationInTraffic
+	if duration == 0 {
+		duration = 0
+	}
+	if durationInTraffic != 0 {
+		durationInTraffic = durationInTraffic
+	}
 	return duration
 }

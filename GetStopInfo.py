@@ -7,6 +7,8 @@ data = json.loads(jsonString)
 stops = data['data']
 
 IDList = {}
+longitudeList = {}
+latitudeList = {}
 
 for stop in stops:
     relationships = stop['relationships']
@@ -14,6 +16,9 @@ for stop in stops:
     if parent_station['data'] == None:
         attributes = stop['attributes']
         IDList[attributes['name']] = stop['id']
+        longitudeList[attributes['name']] = attributes['longitude']
+        latitudeList[attributes['name']] = attributes['latitude']
+
 
 print('Ready:')
 while True:
@@ -21,7 +26,9 @@ while True:
     if line == 'q':
         break
     try:
-        print(IDList[line])
+        print('ID: ' + IDList[line])
+        print('Longitude: ' + str(longitudeList[line]))
+        print('Latitude: ' + str(latitudeList[line]))
     except:
         print('No ID Found')
     print()
