@@ -18,7 +18,7 @@ var numberOfRoutes int64
 func FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, time.Duration) {
 	if mapsClient == nil {
 		var err error
-		mapsClient, err = maps.NewClient(maps.WithAPIKey("put api key here"))
+		mapsClient, err = maps.NewClient(maps.WithAPIKey("an api key"))
 		if err != nil {
 			log.Fatalf("fatal error: %s", err)
 		}
@@ -82,13 +82,26 @@ func findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
 		},
 	}
 
-	resp, err := mapsClient.DistanceMatrix(context.Background(), req)
-	if err != nil {
-		log.Fatalf("fatal error: %s", err)
-	}
+	var resp *maps.DistanceMatrixResponse
+	count := 0
+	for {
+		if count > 5 {
+			log.Fatalf("More than 5 retries on query.")
+		}
 
-	if resp.Rows[0].Elements[0].Status != "OK" {
-		log.Fatalf("Non OK element status: %s\n%s\n", resp.Rows[0].Elements[0].Status, err)
+		var err error
+		resp, err = mapsClient.DistanceMatrix(context.Background(), req)
+		if err != nil {
+			log.Fatalf("fatal error: %s", err)
+		}
+
+		if resp.Rows[0].Elements[0].Status != "OK" {
+			fmt.Printf("Elements Status: %v\n\n", resp.Rows[0].Elements[0].Status)
+			count++
+			continue
+		}
+
+		break
 	}
 
 	duration := resp.Rows[0].Elements[0].Duration
