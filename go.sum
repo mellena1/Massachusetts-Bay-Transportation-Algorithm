@@ -9,6 +9,7 @@ github.com/mellena1/go.jsonapi v0.0.0-20190605213741-fed8aaea31f6/go.mod h1:MlQR
 github.com/mellena1/mbta-v3-go v0.0.0-20190610225830-87ab57bfcb6f h1:mclxd0xWTwss/XWfhrzTa+2oceE7ovYigroHqQN1Lzk=
 github.com/mellena1/mbta-v3-go v0.0.0-20190610225830-87ab57bfcb6f/go.mod h1:gNv08KsqRWvDP9dcNMMteJFs2bTfpWDJ1tZg66E2Zpw=
 github.com/mellena1/mbta-v3-go v0.0.0-20190708162129-2452ecf35b88 h1:NP/KXS4pji3d+dOWU+TnpMXdEJBGAxQNuO04PlrS04o=
+github.com/mellena1/mbta-v3-go v0.0.0-20190708162129-2452ecf35b88/go.mod h1:Au49ypZFPein+MsEe5MZLXSLG55T6biugYQ3xF4tzVk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sergi/go-diff v1.0.0 h1:Kpca3qRNrduNnOQeazBd0ysaKrUJiIuISHxogkT9RPQ=

@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/google/uuid v1.1.1 // indirect
-	github.com/mellena1/mbta-v3-go v0.0.0-20190610225830-87ab57bfcb6f
+	github.com/mellena1/mbta-v3-go v0.0.0-20190708162129-2452ecf35b88
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect

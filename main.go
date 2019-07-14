@@ -3,72 +3,31 @@ package main
 import (
 	"fmt"
 	"log"
-	"strconv"
-	"sync"
 	"time"
 
-	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/graph"
-	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/simulation"
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/calculation"
 )
 
 func main() {
-	/*
-		main thread:
-			make data channel for sims to send done data back
-			get the starting stops from the graph
-			for range starting stops:
-				check when trains come in
-				if train:
-					make simulation struct
-					go sim.Run()
+	endpoints := calculation.GetEndpointStops()
 
-			for range data channel:
-				if something:
-					write data to db/file
-	*/
-
-	graph.InitPackage("graph copy.json")
-
-	dataChannel := make(chan simulation.SimData)
-	var wg sync.WaitGroup
-	endpoints := getEndpoints()
-
-	for _, stop := range endpoints {
-		sim := simulation.Simulation{
-			Channel: dataChannel,
-			Data: simulation.SimData{
-				StartTime: time.Now(),
-				Stops:     simulation.NewStopList(graph.StopList, stop),
-			},
-			CurrentlyAt: stop,
-			GoingTo:     graph.StopMap[stop.Edges[0]],
-			WG:          &wg,
-		}
-		wg.Add(1)
-		go sim.Run()
+	if len(endpoints) == 0 {
+		log.Fatalf("No endpoints returned")
 	}
-	go func() {
-		wg.Wait()
-		close(dataChannel)
-	}()
 
-	x := 0
-	for data := range dataChannel {
-		x++
-		err := simulation.ExportRoute(data, "test/route"+strconv.Itoa(x))
-		if err != nil {
-			log.Fatalf("Could not export route.")
-		}
-	}
-	fmt.Println(x)
-}
+	fmt.Println(endpoints)
 
-func getEndpoints() []*graph.Stop {
-	endpoints := []*graph.Stop{}
-	for _, s := range graph.StopList {
-		if s.IsEndpoint() {
-			endpoints = append(endpoints, s)
-		}
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		log.Fatalf("A fatal error occurred: %s", err)
 	}
-	return endpoints
+	startTime := time.Date(2019, time.July, 18, 9, 0, 0, 0, loc)
+
+	route, duration := calculation.FindBestRoute(endpoints, startTime)
+
+	fmt.Printf("Trip Duration: %v\n", duration)
+
+	for i, stop := range route {
+		fmt.Printf("%d: %s\n", i, stop.Name)
+	}
 }
