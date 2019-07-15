@@ -36,6 +36,5 @@ with open("../endpoint_graph.json", 'r') as json_file:
                 graph.add_edge(u_name, v_name)
                 edge_colors.append('gray')
     
-    pos = nx.spring_layout(graph, k=0.25, iterations=100)
-    nx.draw(graph, with_labels=True, pos=pos, node_color=node_colors, edge_color=edge_colors)
+    nx.draw(graph, with_labels=True, node_color=node_colors, edge_color=edge_colors)
     plt.show()
