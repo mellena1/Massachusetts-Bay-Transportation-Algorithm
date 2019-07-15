@@ -9,13 +9,13 @@ import (
 )
 
 // MakeLagrangeFunctionForAllEdges returns a map of edges to lagrange time functions, key is the name of both stops seperated by a colon
-func MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time) {
+func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time) {
 	numStops := len(stops) - 1
 	lagrangeFunctions := make(map[string]*lagrange.Lagrange, numStops*numStops)
 	for _, stopA := range stops {
 		for _, stopB := range stops {
 			if stopA != stopB {
-				lagrangeFunctions[stopA.Name+":"+stopB.Name] = makeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
+				lagrangeFunctions[stopA.Name+":"+stopB.Name] = c.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
 			}
 		}
 	}
