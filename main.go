@@ -58,7 +58,7 @@ func getLagrangeFuncs() {
 	endTime := time.Date(2019, time.July, 18, 21, 0, 0, 0, loc)
 	interval := time.Hour
 
-	calc, err := calculation.NewCalculator("AIzaSyBxN2HR2-v7z_Xk9cxxdf0dWxPa5XFiZ54")
+	calc, err := calculation.NewCalculator("api key here")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -99,7 +99,9 @@ func testLagrangeFunc() {
 		log.Fatalf("A fatal error occurred: %s", err)
 	}
 	startTime := time.Date(2019, time.July, 18, 9, 30, 0, 0, loc)
+
 	dur, err := calculation.GetDurationForEdgeFromLagrange(lagranges[0].Lagrange, startTime)
+
 	if err != nil {
 		log.Fatal(err)
 	}
