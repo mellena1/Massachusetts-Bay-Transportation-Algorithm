@@ -13,5 +13,6 @@ for stop in stops:
 
 stopnames = list(dict.fromkeys(stopnames))
 
+print("Number of subway stops: " + str(len(stopnames)))
 for k in stopnames:
     print(k)
