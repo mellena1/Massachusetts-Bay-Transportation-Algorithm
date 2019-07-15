@@ -1,3 +1,4 @@
 .vscode
 **.png
 **.DS_Store
+*.secret

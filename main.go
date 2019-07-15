@@ -25,7 +25,7 @@ func main() {
 	// }
 	// startTime := time.Date(2019, time.July, 18, 9, 0, 0, 0, loc)
 
-	// calc, err := calculation.NewCalculator("")
+	// calc, err := calculation.NewCalculator(readAPIKey("apikey.secret"))
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
@@ -39,6 +39,14 @@ func main() {
 
 	// getLagrangeFuncs()
 	testLagrangeFunc()
+}
+
+func readAPIKey(filename string) string {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatalf("Can't read api key: %v", err)
+	}
+	return string(data)
 }
 
 func getLagrangeFuncs() {
@@ -58,7 +66,7 @@ func getLagrangeFuncs() {
 	endTime := time.Date(2019, time.July, 18, 21, 0, 0, 0, loc)
 	interval := time.Hour
 
-	calc, err := calculation.NewCalculator("api key here")
+	calc, err := calculation.NewCalculator(readAPIKey("apikey.secret"))
 	if err != nil {
 		log.Fatal(err)
 	}
