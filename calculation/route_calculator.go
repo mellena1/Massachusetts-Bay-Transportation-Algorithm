@@ -65,10 +65,7 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 
 func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime time.Time) time.Duration {
 	lagrange := c.timeFunctions[getLFHKey(stopA, stopB)]
-	dur, err := GetDurationForEdgeFromLagrange(lagrange, startTime)
-	if err != nil {
-		log.Fatalf("findEdgeTime failed on lagrange: %v, %v", err, startTime)
-	}
+	dur := GetDurationForEdgeFromLagrange(lagrange, startTime)
 	if dur.Hours() > 3 {
 		log.Printf("time: %s stopA: %s stopB: %s bad: %d", startTime.String(), stopA.Name, stopB.Name, int(dur.Hours()))
 	}
