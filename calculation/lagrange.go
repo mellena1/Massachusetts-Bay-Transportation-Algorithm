@@ -38,6 +38,7 @@ func (l *Lagrange) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.D
 				lagrangeFunctions[stopA.Name+":"+stopB.Name] = l.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
 			}
 		}
+		log.Printf("Done with %s", stopA.Name)
 	}
 
 	return lagrangeFunctions

@@ -65,12 +65,12 @@ func getLagrangeFuncs() {
 	endTime := time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)
 	interval := time.Minute * 30
 
-	calc, err := calculation.NewCalculator(readAPIKey("apikey.secret"))
+	lagrangeCalc, err := calculation.NewLagrange(readAPIKey("apikey.secret"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	lagranges := calc.MakeLagrangeFunctionForAllEdges(endpoints, interval, startTime, endTime)
+	lagranges := lagrangeCalc.MakeLagrangeFunctionForAllEdges(endpoints, interval, startTime, endTime)
 	calculation.WriteLangrageFunctionsToFile(lagranges, "lagrangeFunctions.json")
 }
 
