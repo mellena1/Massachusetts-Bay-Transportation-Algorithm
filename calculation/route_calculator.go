@@ -2,6 +2,7 @@ package calculation
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -11,11 +12,7 @@ type Calculator struct {
 	timeFunctions      LagrangeFunctionsHolder
 }
 
-func NewCalculator() (*Calculator, error) {
-	timeFunctions, err := ReadLagrangeFunctionsFromFile("lagrangeFunctions.json")
-	if err != nil {
-		return nil, err
-	}
+func NewCalculator(timeFunctions LagrangeFunctionsHolder) (*Calculator, error) {
 	return &Calculator{timeFunctions: timeFunctions}, nil
 }
 
@@ -61,11 +58,19 @@ func removeIndex(index int, list []Stop) []Stop {
 func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 	var duration time.Duration
 	for i := 0; i < len(route)-1; i++ {
-		duration += c.findEdgeTime(route[i], route[i+1], c.startTimeForRoutes.Add(duration).Unix())
+		duration += c.findEdgeTime(route[i], route[i+1], c.startTimeForRoutes.Add(duration))
 	}
 	return duration
 }
 
-func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
-	return time.Duration(0)
+func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime time.Time) time.Duration {
+	lagrange := c.timeFunctions[getLFHKey(stopA, stopB)]
+	dur, err := GetDurationForEdgeFromLagrange(lagrange, startTime)
+	if err != nil {
+		log.Fatalf("findEdgeTime failed on lagrange: %v, %v", err, startTime)
+	}
+	if dur.Hours() > 3 {
+		log.Printf("time: %s stopA: %s stopB: %s bad: %d", startTime.String(), stopA.Name, stopB.Name, int(dur.Hours()))
+	}
+	return dur
 }

@@ -16,6 +16,10 @@ import (
 
 type LagrangeFunctionsHolder map[string]*lagrange.Lagrange
 
+func getLFHKey(stopA, stopB Stop) string {
+	return stopA.Name + ":" + stopB.Name
+}
+
 type Lagrange struct {
 	mapsClient *maps.Client
 }
@@ -35,7 +39,7 @@ func (l *Lagrange) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.D
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				lagrangeFunctions[stopA.Name+":"+stopB.Name] = l.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
+				lagrangeFunctions[getLFHKey(stopA, stopB)] = l.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
 			}
 		}
 		log.Printf("Done with %s", stopA.Name)
