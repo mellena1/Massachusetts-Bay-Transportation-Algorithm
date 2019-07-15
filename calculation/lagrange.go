@@ -21,13 +21,7 @@ func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time
 	}
 }
 
-type LagrangeApproxEdge struct {
-	Lagrange     *lagrange.Lagrange
-	StartingStop *Stop
-	EndingStop   *Stop
-}
-
-func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) *LagrangeApproxEdge {
+func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) *lagrange.Lagrange {
 	x := []float64{}
 	y := []float64{}
 
@@ -43,11 +37,7 @@ func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval tim
 	approx := lagrange.New()
 	approx.Fit(x, y) // could return error, but only if x and y are different lengths. In this case they won't be
 
-	return &LagrangeApproxEdge{
-		Lagrange:     approx,
-		StartingStop: &stopA,
-		EndingStop:   &stopB,
-	}
+	return approx
 }
 
 func GetDurationForEdgeFromLagrange(approxFunc *lagrange.Lagrange, startTime time.Time) (time.Duration, error) {
