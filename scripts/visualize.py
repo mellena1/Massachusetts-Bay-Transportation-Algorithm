@@ -3,7 +3,7 @@ import json
 import graphviz
 import matplotlib.pyplot as plt
 
-with open("../graph.json", 'r') as json_file:
+with open("../graph/graph.json", 'r') as json_file:
     data = json.load(json_file)
     station_map = {}
     graph = nx.Graph()

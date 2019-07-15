@@ -3,7 +3,7 @@ import json
 import graphviz
 import matplotlib.pyplot as plt
 
-with open("../endpoint_graph.json", 'r') as json_file:
+with open("../graph/endpoint_graph.json", 'r') as json_file:
     data = json.load(json_file)
     graph = nx.Graph()
     node_colors = []
