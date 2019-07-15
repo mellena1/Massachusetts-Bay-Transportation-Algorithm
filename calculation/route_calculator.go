@@ -1,35 +1,22 @@
 package calculation
 
 import (
-	"context"
 	"fmt"
-	"log"
-	"strconv"
 	"time"
-
-	"googlemaps.github.io/maps"
 )
 
 type Calculator struct {
-	mapsClient         *maps.Client
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
 	timeFunctions      LagrangeFunctionsHolder
 }
 
-func NewCalculator(apiKey string) (*Calculator, error) {
+func NewCalculator() (*Calculator, error) {
 	timeFunctions, err := ReadLagrangeFunctionsFromFile("lagrangeFunctions.json")
 	if err != nil {
 		return nil, err
 	}
-	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
-	if err != nil {
-		return nil, err
-	}
-	return &Calculator{
-		mapsClient:    mapsClient,
-		timeFunctions: timeFunctions,
-	}, nil
+	return &Calculator{timeFunctions: timeFunctions}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
@@ -80,46 +67,5 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 }
 
 func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
-	req := &maps.DistanceMatrixRequest{
-		Origins:       []string{stopA.getCoordinateString()},
-		Destinations:  []string{stopB.getCoordinateString()},
-		DepartureTime: strconv.FormatInt(startTime, 10),
-		Mode:          maps.TravelModeTransit,
-		TransitMode: []maps.TransitMode{
-			maps.TransitModeRail,
-			maps.TransitModeSubway,
-			maps.TransitModeTrain,
-			maps.TransitModeTram,
-		},
-	}
-
-	var resp *maps.DistanceMatrixResponse
-	count := 0
-	for {
-		if count > 5 {
-			log.Fatalf("More than 5 retries on query.")
-		}
-
-		var err error
-		resp, err = c.mapsClient.DistanceMatrix(context.Background(), req)
-		if err != nil {
-			log.Fatalf("fatal error: %s", err)
-		}
-
-		if resp.Rows[0].Elements[0].Status != "OK" {
-			fmt.Printf("Elements Status: %v\n\n", resp.Rows[0].Elements[0].Status)
-			count++
-			continue
-		}
-
-		break
-	}
-
-	duration := resp.Rows[0].Elements[0].Duration
-	durationInTraffic := resp.Rows[0].Elements[0].DurationInTraffic
-	if durationInTraffic > duration {
-		duration = durationInTraffic
-	}
-
-	return duration
+	return time.Duration(0)
 }

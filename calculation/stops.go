@@ -35,7 +35,7 @@ func GetEndpointStops() []Stop {
 		log.Fatalf("A fatal error occurred: %s", err)
 	}
 
-	_, jsonStopIDs, err := graph.LoadGraphFile("graph.json")
+	_, jsonStopIDs, err := graph.LoadGraphFile("graph/graph.json")
 	if err != nil {
 		log.Fatalf("A fatal error occurred: %s", err)
 	}
