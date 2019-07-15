@@ -50,7 +50,7 @@ func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval tim
 	x := []float64{}
 	y := []float64{}
 
-	for curTime := startTime; curTime.Before(endTime); curTime = curTime.Add(interval) {
+	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
 		newXVal := lagrangeUnitFromTime(curTime)
 		x = append(x, newXVal)
 
@@ -71,7 +71,11 @@ func GetDurationForEdgeFromLagrange(approxFunc *lagrange.Lagrange, startTime tim
 }
 
 func lagrangeUnitFromTime(t time.Time) float64 {
-	return float64((t.Hour() * 60) + (t.Minute()))
+	hour := t.Hour()
+	if hour <= 4 {
+		hour += 24
+	}
+	return float64((hour * 60) + t.Minute())
 }
 
 func lagrangeUnitFromDuration(t time.Duration) float64 {
