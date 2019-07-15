@@ -50,8 +50,6 @@ with open("../graph.json", 'r') as json_file:
                     edge_colors.append('dodgerblue')
     
     pos = nx.spring_layout(graph, k=0.25, iterations=100)
-    print(edge_colors)
-    print(len(graph.edges))
     nx.draw(graph, with_labels=True, pos=pos, node_color=node_colors, edge_color=edge_colors[:22])
     plt.show()
         
