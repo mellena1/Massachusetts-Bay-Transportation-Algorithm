@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 with open("../endpoint_graph.json", 'r') as json_file:
     data = json.load(json_file)
-    station_map = {}
     graph = nx.Graph()
     node_colors = []
     edge_colors = []
@@ -23,7 +22,6 @@ with open("../endpoint_graph.json", 'r') as json_file:
         elif station_name in ['Bowdoin', 'Wonderland']:
             node_colors.append('dodgerblue')
 
-        station_map[station_id] = station_name
         graph.add_node(station_name)
     
     for station in data:
@@ -32,7 +30,6 @@ with open("../endpoint_graph.json", 'r') as json_file:
             v_name = station['name']
             if u_name == v_name:
                 continue
-
             if graph.has_edge(u_name, v_name):
                 continue
             else:
