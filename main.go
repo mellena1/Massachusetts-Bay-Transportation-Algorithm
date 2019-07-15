@@ -63,7 +63,7 @@ func getLagrangeFuncs() {
 	}
 	startTime := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc)
 	endTime := time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)
-	interval := time.Hour
+	interval := time.Minute * 30
 
 	calc, err := calculation.NewCalculator(readAPIKey("apikey.secret"))
 	if err != nil {
