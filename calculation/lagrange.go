@@ -8,15 +8,21 @@ import (
 	"github.com/DzananGanic/numericalgo/interpolate/lagrange"
 )
 
-func makeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) *lagrange.Lagrange {
+type LagrangeApproxEdge struct {
+	Lagrange     *lagrange.Lagrange
+	StartingStop *Stop
+	EndingStop   *Stop
+}
+
+func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) *LagrangeApproxEdge {
 	x := []float64{}
 	y := []float64{}
 
-	for curTime := startTime; curTime.Before(endTime); curTime.Add(interval) {
+	for curTime := startTime; curTime.Before(endTime); curTime = curTime.Add(interval) {
 		newXVal := lagrangeUnitFromTime(curTime)
 		x = append(x, newXVal)
 
-		edgeTime := findEdgeTime(stopA, stopB, curTime.Unix())
+		edgeTime := c.findEdgeTime(stopA, stopB, curTime.Unix())
 		newYVal := lagrangeUnitFromDuration(edgeTime)
 		y = append(y, newYVal)
 	}
@@ -24,10 +30,14 @@ func makeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, star
 	approx := lagrange.New()
 	approx.Fit(x, y) // could return error, but only if x and y are different lengths. In this case they won't be
 
-	return approx
+	return &LagrangeApproxEdge{
+		Lagrange:     approx,
+		StartingStop: &stopA,
+		EndingStop:   &stopB,
+	}
 }
 
-func getDurationForEdgeFromLagrange(approxFunc *lagrange.Lagrange, startTime time.Time) (time.Duration, error) {
+func GetDurationForEdgeFromLagrange(approxFunc *lagrange.Lagrange, startTime time.Time) (time.Duration, error) {
 	timeFloat, err := interpolate.WithSingle(approxFunc, lagrangeUnitFromTime(startTime))
 	return durationFromLagrangeUnit(timeFloat), err
 }
@@ -37,7 +47,7 @@ func lagrangeUnitFromTime(t time.Time) float64 {
 }
 
 func lagrangeUnitFromDuration(t time.Duration) float64 {
-	return float64((t.Hours() * 60) + (t.Minutes()))
+	return t.Minutes()
 }
 
 func durationFromLagrangeUnit(f float64) time.Duration {
