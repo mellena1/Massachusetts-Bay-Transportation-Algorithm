@@ -16,9 +16,9 @@ type LagrangeFunctionsHolder map[string]*lagrange.Lagrange
 func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time) LagrangeFunctionsHolder {
 	numStops := len(stops) - 1
 	lagrangeFunctions := make(LagrangeFunctionsHolder, numStops*numStops)
-	for _, stopA := range stops {
-		for _, stopB := range stops {
-			if stopA != stopB {
+	for i, stopA := range stops {
+		for j, stopB := range stops {
+			if i != j {
 				lagrangeFunctions[stopA.Name+":"+stopB.Name] = c.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime)
 			}
 		}
