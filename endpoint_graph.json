@@ -1,0 +1,50 @@
+[
+    {
+        "id": "place-lake",
+        "name": "Boston College"
+    },
+    {
+        "id": "place-lech",
+        "name": "Lechmere"
+    },
+    {
+        "id": "place-clmnl",
+        "name": "Cleveland Circle"
+    },
+    {
+        "id": "place-river",
+        "name": "Riverside"
+    },
+    {
+        "id": "place-hsmnl",
+        "name": "Heath Street"
+    },
+    {
+        "id": "place-forhl",
+        "name": "Forest Hills"
+    },
+    {
+        "id": "place-ogmnl",
+        "name": "Oak Grove"
+    },
+    {
+        "id": "place-alfcl",
+        "name": "Alewife"
+    },
+    {
+        "id": "place-brntn",
+        "name": "Braintree"
+    },
+    {
+        "id": "place-matt",
+        "name": "Mattapan"
+    },
+    {
+        "id": "place-bomnl",
+        "name": "Bowdoin"
+    },
+    {
+        "id": "place-wondl",
+        "name": "Wonderland"
+    }
+]
