@@ -14,11 +14,22 @@ type Calculator struct {
 	mapsClient         *maps.Client
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
+	timeFunctions      LagrangeFunctionsHolder
 }
 
 func NewCalculator(apiKey string) (*Calculator, error) {
+	timeFunctions, err := ReadLagrangeFunctionsFromFile("lagrangeFunctions.json")
+	if err != nil {
+		return nil, err
+	}
 	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
-	return &Calculator{mapsClient: mapsClient}, err
+	if err != nil {
+		return nil, err
+	}
+	return &Calculator{
+		mapsClient:    mapsClient,
+		timeFunctions: timeFunctions,
+	}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
