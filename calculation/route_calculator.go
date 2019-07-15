@@ -10,31 +10,31 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-var mapsClient *maps.Client
-var startTimeForRoutes time.Time
-var numberOfRoutes int64
-
-// FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
-func FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, time.Duration) {
-	if mapsClient == nil {
-		var err error
-		mapsClient, err = maps.NewClient(maps.WithAPIKey("an api key"))
-		if err != nil {
-			log.Fatalf("fatal error: %s", err)
-		}
-	}
-
-	numberOfRoutes = 0
-	startTimeForRoutes = startTime
-	route := make([]Stop, 0)
-	return findBestRouteHelper(route, stops)
+type Calculator struct {
+	mapsClient         *maps.Client
+	startTimeForRoutes time.Time
+	numberOfRoutes     int64
 }
 
-func findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]Stop, time.Duration) {
+func NewCalculator(apiKey string) (*Calculator, error) {
+	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
+	return &Calculator{mapsClient: mapsClient}, err
+}
+
+// FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
+func (c *Calculator) FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, time.Duration) {
+	c.numberOfRoutes = 0
+	c.startTimeForRoutes = startTime
+
+	route := make([]Stop, 0)
+	return c.findBestRouteHelper(route, stops)
+}
+
+func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]Stop, time.Duration) {
 	if len(stopsLeft) == 0 {
-		numberOfRoutes++
-		duration := findRouteTime(curRoute)
-		fmt.Printf("Routes Tested: %d\nDuration: %v\n\n", numberOfRoutes, duration)
+		c.numberOfRoutes++
+		duration := c.findRouteTime(curRoute)
+		fmt.Printf("Routes Tested: %d\nDuration: %v\n\n", c.numberOfRoutes, duration)
 		return curRoute, duration
 	}
 
@@ -43,7 +43,7 @@ func findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]Stop, time.Durati
 	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
 	for i := range stopsLeft {
-		route, duration := findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
+		route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 		if duration < bestDuration {
 			bestRoute = route
 			bestDuration = duration
@@ -60,15 +60,15 @@ func removeIndex(index int, list []Stop) []Stop {
 	return newList
 }
 
-func findRouteTime(route []Stop) time.Duration {
+func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 	var duration time.Duration
 	for i := 0; i < len(route)-1; i++ {
-		duration += findEdgeTime(route[i], route[i+1], startTimeForRoutes.Add(duration).Unix())
+		duration += c.findEdgeTime(route[i], route[i+1], c.startTimeForRoutes.Add(duration).Unix())
 	}
 	return duration
 }
 
-func findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
+func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
 	req := &maps.DistanceMatrixRequest{
 		Origins:       []string{stopA.getCoordinateString()},
 		Destinations:  []string{stopB.getCoordinateString()},
@@ -90,7 +90,7 @@ func findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
 		}
 
 		var err error
-		resp, err = mapsClient.DistanceMatrix(context.Background(), req)
+		resp, err = c.mapsClient.DistanceMatrix(context.Background(), req)
 		if err != nil {
 			log.Fatalf("fatal error: %s", err)
 		}
