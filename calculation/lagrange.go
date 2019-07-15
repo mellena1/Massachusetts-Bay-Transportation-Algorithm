@@ -1,17 +1,21 @@
 package calculation
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"time"
 
 	"github.com/DzananGanic/numericalgo/interpolate"
 	"github.com/DzananGanic/numericalgo/interpolate/lagrange"
 )
 
+type LagrangeFunctionsHolder map[string]*lagrange.Lagrange
+
 // MakeLagrangeFunctionForAllEdges returns a map of edges to lagrange time functions, key is the name of both stops seperated by a colon
-func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time) {
+func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time) LagrangeFunctionsHolder {
 	numStops := len(stops) - 1
-	lagrangeFunctions := make(map[string]*lagrange.Lagrange, numStops*numStops)
+	lagrangeFunctions := make(LagrangeFunctionsHolder, numStops*numStops)
 	for _, stopA := range stops {
 		for _, stopB := range stops {
 			if stopA != stopB {
@@ -19,6 +23,27 @@ func (c *Calculator) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time
 			}
 		}
 	}
+
+	return lagrangeFunctions
+}
+
+func WriteLangrageFunctionsToFile(lagranges LagrangeFunctionsHolder, filename string) error {
+	data, err := json.Marshal(lagranges)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filename, data, 0644)
+	return err
+}
+
+func ReadLagrangeFunctionsFromFile(filename string) (LagrangeFunctionsHolder, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	lagranges := make(LagrangeFunctionsHolder)
+	err = json.Unmarshal(data, &lagranges)
+	return lagranges, err
 }
 
 func (c *Calculator) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) *lagrange.Lagrange {
