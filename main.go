@@ -83,7 +83,7 @@ func getLagrangeFuncs() calculation.LagrangeFunctionsHolder {
 		log.Fatal(err)
 	}
 
-	edges, _ := calculation.ReadAPICalls("edgesAPICalls.json")
+	edges, _ := calculation.ReadAPICalls("edgesAPICalls_Thursday.json")
 	lagranges := lagrangeCalc.MakeLagrangeFunctionForAllEdges(endpoints, interval, startTime, endTime, edges)
 	// calculation.WriteLangrageFunctionsToFile(lagranges, "lagrangeFunctionsCubicSplines.json")
 
