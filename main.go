@@ -16,8 +16,6 @@ func main() {
 		log.Fatalf("No endpoints returned")
 	}
 
-	fmt.Println(len(endpoints))
-
 	loc, err := time.LoadLocation("America/New_York")
 	if err != nil {
 		log.Fatalf("A fatal error occurred: %s", err)
