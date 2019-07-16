@@ -10,10 +10,11 @@ type Calculator struct {
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
 	timeFunctions      LagrangeFunctionsHolder
+	bestTime           time.Duration
 }
 
 func NewCalculator(timeFunctions LagrangeFunctionsHolder) (*Calculator, error) {
-	return &Calculator{timeFunctions: timeFunctions}, nil
+	return &Calculator{timeFunctions: timeFunctions, bestTime: (time.Hour * 1000)}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
@@ -29,11 +30,11 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
-		if c.numberOfRoutes%10000000 == 0 {
-			fmt.Printf("Routes Tested: %d\nDuration: %v\n\n", c.numberOfRoutes, duration)
+		if duration.Minutes() < c.bestTime.Minutes() {
+			c.bestTime = duration
 		}
-		if duration.Hours() < 6 {
-			fmt.Printf("World Record!!! %v\n", duration)
+		if c.numberOfRoutes%1000000 == 0 {
+			fmt.Printf("Routes Tested: %d\nBest Time: %v\n\n", c.numberOfRoutes, c.bestTime)
 		}
 		return curRoute, duration
 	}
