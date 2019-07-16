@@ -29,8 +29,11 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
-		if c.numberOfRoutes%100000 == 0 {
+		if c.numberOfRoutes%10000000 == 0 {
 			fmt.Printf("Routes Tested: %d\nDuration: %v\n\n", c.numberOfRoutes, duration)
+		}
+		if duration.Hours() < 6 {
+			fmt.Printf("World Record!!! %v\n", duration)
 		}
 		return curRoute, duration
 	}
