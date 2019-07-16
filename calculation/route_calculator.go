@@ -10,6 +10,7 @@ type Calculator struct {
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
 	timeFunctions      LagrangeFunctionsHolder
+	startTime          time.Time
 }
 
 func NewCalculator(timeFunctions LagrangeFunctionsHolder) (*Calculator, error) {
@@ -22,6 +23,7 @@ func (c *Calculator) FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, t
 	c.startTimeForRoutes = startTime
 
 	route := make([]Stop, 0)
+	c.startTime = time.Now()
 	return c.findBestRouteHelper(route, stops)
 }
 
@@ -29,8 +31,11 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
-		if c.numberOfRoutes%100000 == 0 {
+		if c.numberOfRoutes%1000000 == 0 {
+			elapsed := time.Since(c.startTime)
+			c.startTime = time.Now()
 			fmt.Printf("Routes Tested: %d\nDuration: %v\n\n", c.numberOfRoutes, duration)
+			fmt.Printf("Time taken to calculate: %s\n", elapsed)
 		}
 		return curRoute, duration
 	}
