@@ -38,8 +38,8 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 		if c.numberOfRoutes%1000000 == 0 {
 			elapsed := time.Since(c.startTime)
 			c.startTime = time.Now()
-			fmt.Printf("Routes Tested: %d\nBest Time: %v\n\n", c.numberOfRoutes, c.bestTime)
-			fmt.Printf("Time taken to calculate: %s\n", elapsed)
+			fmt.Printf("Routes Tested: %d\nBest Time: %v\n", c.numberOfRoutes, c.bestTime)
+			fmt.Printf("Time taken to calculate: %s\n\n", elapsed)
 		}
 		return curRoute, duration
 	}
