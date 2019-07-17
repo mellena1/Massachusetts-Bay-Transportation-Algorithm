@@ -35,8 +35,9 @@ func main() {
 	// }
 	// fmt.Println(dur.Hours())
 
-	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
-	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
+	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
 
 	calc, err := calculation.NewCalculator(timeFunctions)
 	if err != nil {
