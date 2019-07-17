@@ -9,12 +9,12 @@ import (
 type Calculator struct {
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
-	timeFunctions      LagrangeFunctionsHolder
+	timeFunctions      CubicSplineFunctionsHolder
 	startTime          time.Time
 	bestTime           time.Duration
 }
 
-func NewCalculator(timeFunctions LagrangeFunctionsHolder) (*Calculator, error) {
+func NewCalculator(timeFunctions CubicSplineFunctionsHolder) (*Calculator, error) {
 	return &Calculator{timeFunctions: timeFunctions, bestTime: (time.Hour * 1000)}, nil
 }
 
@@ -75,8 +75,8 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 }
 
 func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime time.Time) time.Duration {
-	lagrange := c.timeFunctions[getLFHKey(stopA, stopB)]
-	dur := GetDurationForEdgeFromLagrange(lagrange, startTime)
+	cubicSpline := c.timeFunctions[getLFHKey(stopA, stopB)]
+	dur := GetDurationForEdgeFromCubicSpline(cubicSpline, startTime)
 	if dur.Hours() > 3 {
 		log.Printf("time: %s stopA: %s stopB: %s bad: %d", startTime.String(), stopA.Name, stopB.Name, int(dur.Hours()))
 	}

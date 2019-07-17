@@ -18,44 +18,44 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-type LagrangeFunctionsHolder map[string]gospline.Spline
+type CubicSplineFunctionsHolder map[string]gospline.Spline
 
 func getLFHKey(stopA, stopB Stop) string {
 	return stopA.Name + ":" + stopB.Name
 }
 
-type Lagrange struct {
+type CubicSpline struct {
 	mapsClient *maps.Client
 }
 
-func NewLagrange(apiKey string) (*Lagrange, error) {
+func NewCubicSpline(apiKey string) (*CubicSpline, error) {
 	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
 		return nil, err
 	}
-	return &Lagrange{mapsClient: mapsClient}, nil
+	return &CubicSpline{mapsClient: mapsClient}, nil
 }
 
 type EdgeTimes map[int64]time.Duration
 type Edges map[string]EdgeTimes
 
-// MakeLagrangeFunctionForAllEdges returns a map of edges to lagrange time functions, key is the name of both stops seperated by a colon
-func (l *Lagrange) MakeLagrangeFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) LagrangeFunctionsHolder {
+// MakeCubicSplineFunctionForAllEdges returns a map of edges to CubicSpline time functions, key is the name of both stops seperated by a colon
+func (l *CubicSpline) MakeCubicSplineFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) CubicSplineFunctionsHolder {
 	numStops := len(stops) - 1
-	lagrangeFunctions := make(LagrangeFunctionsHolder, numStops*numStops)
+	cubicSplineFunctions := make(CubicSplineFunctionsHolder, numStops*numStops)
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				lagrangeFunctions[getLFHKey(stopA, stopB)] = l.MakeLagrangeFunctionForEdge(stopA, stopB, interval, startTime, endTime, edges)
+				cubicSplineFunctions[getLFHKey(stopA, stopB)] = l.MakeCubicSplineFunctionForEdge(stopA, stopB, interval, startTime, endTime, edges)
 			}
 		}
 		log.Printf("Done with %s", stopA.Name)
 	}
 
-	return lagrangeFunctions
+	return cubicSplineFunctions
 }
 
-func (l *Lagrange) SaveAPICalls(stops []Stop, interval time.Duration, startTime, endTime time.Time, filename string) {
+func (l *CubicSpline) SaveAPICalls(stops []Stop, interval time.Duration, startTime, endTime time.Time, filename string) {
 	numStops := len(stops) - 1
 	edges := make(Edges, numStops*numStops)
 	for i, stopA := range stops {
@@ -84,7 +84,7 @@ func ReadAPICalls(filename string) (Edges, error) {
 	return edges, nil
 }
 
-func (l *Lagrange) makeAPICall(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) EdgeTimes {
+func (l *CubicSpline) makeAPICall(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time) EdgeTimes {
 	edgeTimes := make(EdgeTimes)
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
 		unixTime := curTime.Unix()
@@ -93,8 +93,8 @@ func (l *Lagrange) makeAPICall(stopA, stopB Stop, interval time.Duration, startT
 	return edgeTimes
 }
 
-func WriteLangrageFunctionsToFile(lagranges LagrangeFunctionsHolder, filename string) error {
-	data, err := json.Marshal(lagranges)
+func WriteCubicSplineFunctionsToFile(cubicSplines CubicSplineFunctionsHolder, filename string) error {
+	data, err := json.Marshal(cubicSplines)
 	if err != nil {
 		return err
 	}
@@ -102,17 +102,17 @@ func WriteLangrageFunctionsToFile(lagranges LagrangeFunctionsHolder, filename st
 	return err
 }
 
-func ReadLagrangeFunctionsFromFile(filename string) (LagrangeFunctionsHolder, error) {
+func ReadCubicSplineFunctionsFromFile(filename string) (CubicSplineFunctionsHolder, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	lagranges := make(LagrangeFunctionsHolder)
-	err = json.Unmarshal(data, &lagranges)
-	return lagranges, err
+	cubicSplines := make(CubicSplineFunctionsHolder)
+	err = json.Unmarshal(data, &cubicSplines)
+	return cubicSplines, err
 }
 
-func PlotLagrangeFunc(lagrangeFunc gospline.Spline, filename string) error {
+func PlotCubicSplineFunc(cubicSplineFunc gospline.Spline, filename string) error {
 	p, err := plot.New()
 	if err != nil {
 		return err
@@ -123,28 +123,28 @@ func PlotLagrangeFunc(lagrangeFunc gospline.Spline, filename string) error {
 	pts := make(plotter.XYs, 100)
 	for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
 		var pt plotter.XY
-		pt.X = lagrangeUnitFromTime(i)
-		dur := GetDurationForEdgeFromLagrange(lagrangeFunc, i)
-		pt.Y = lagrangeUnitFromDuration(dur)
+		pt.X = CubicSplineUnitFromTime(i)
+		dur := GetDurationForEdgeFromCubicSpline(cubicSplineFunc, i)
+		pt.Y = CubicSplineUnitFromDuration(dur)
 		pts = append(pts, pt)
 	}
 
 	log.Print("all points made")
-	plotutil.AddLinePoints(p, "lagrange", pts)
+	plotutil.AddLinePoints(p, "CubicSpline", pts)
 
 	return p.Save(10*vg.Inch, 10*vg.Inch, filename)
 }
 
-func (l *Lagrange) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) gospline.Spline {
+func (l *CubicSpline) MakeCubicSplineFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) gospline.Spline {
 	x := []float64{}
 	y := []float64{}
 
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
-		newXVal := lagrangeUnitFromTime(curTime)
+		newXVal := CubicSplineUnitFromTime(curTime)
 		x = append(x, newXVal)
 
 		edgeTime := edges[getLFHKey(stopA, stopB)][curTime.Unix()]
-		newYVal := lagrangeUnitFromDuration(edgeTime)
+		newYVal := CubicSplineUnitFromDuration(edgeTime)
 		y = append(y, newYVal)
 	}
 
@@ -154,12 +154,12 @@ func (l *Lagrange) MakeLagrangeFunctionForEdge(stopA, stopB Stop, interval time.
 	return approx
 }
 
-func GetDurationForEdgeFromLagrange(approxFunc gospline.Spline, startTime time.Time) time.Duration {
-	timeFloat := approxFunc.At(lagrangeUnitFromTime(startTime))
-	return durationFromLagrangeUnit(timeFloat)
+func GetDurationForEdgeFromCubicSpline(approxFunc gospline.Spline, startTime time.Time) time.Duration {
+	timeFloat := approxFunc.At(CubicSplineUnitFromTime(startTime))
+	return durationFromCubicSplineUnit(timeFloat)
 }
 
-func lagrangeUnitFromTime(t time.Time) float64 {
+func CubicSplineUnitFromTime(t time.Time) float64 {
 	hour := t.Hour()
 	if hour <= 4 {
 		hour += 24
@@ -167,11 +167,11 @@ func lagrangeUnitFromTime(t time.Time) float64 {
 	return float64((hour * 60) + t.Minute())
 }
 
-func lagrangeUnitFromDuration(t time.Duration) float64 {
+func CubicSplineUnitFromDuration(t time.Duration) float64 {
 	return t.Minutes()
 }
 
-func durationFromLagrangeUnit(f float64) time.Duration {
+func durationFromCubicSplineUnit(f float64) time.Duration {
 	hours := int(f / 60)
 	mins := int(f - float64(hours*60))
 	durationString := fmt.Sprintf("%dh%dm", hours, mins)
@@ -179,7 +179,7 @@ func durationFromLagrangeUnit(f float64) time.Duration {
 	return duration
 }
 
-func (l *Lagrange) findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
+func (l *CubicSpline) findEdgeTime(stopA Stop, stopB Stop, startTime int64) time.Duration {
 	req := &maps.DistanceMatrixRequest{
 		Origins:       []string{stopA.getCoordinateString()},
 		Destinations:  []string{stopB.getCoordinateString()},

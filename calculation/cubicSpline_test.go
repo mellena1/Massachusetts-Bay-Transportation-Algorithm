@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func Test_lagrangeUnitFromTime(t *testing.T) {
+func Test_cubicSplineUnitFromTime(t *testing.T) {
 	tests := []struct {
 		timeString        string
 		expectedfloatTime float64
@@ -17,12 +17,12 @@ func Test_lagrangeUnitFromTime(t *testing.T) {
 
 	for _, test := range tests {
 		timeObj, _ := time.Parse(time.RFC822, test.timeString)
-		actual := lagrangeUnitFromTime(timeObj)
+		actual := cubicSplineUnitFromTime(timeObj)
 		equals(t, test.expectedfloatTime, actual)
 	}
 }
 
-func Test_lagrangeUnitFromDuration(t *testing.T) {
+func Test_cubicSplineUnitFromDuration(t *testing.T) {
 	tests := []struct {
 		durString         string
 		expectedfloatTime float64
@@ -34,12 +34,12 @@ func Test_lagrangeUnitFromDuration(t *testing.T) {
 
 	for _, test := range tests {
 		dur, _ := time.ParseDuration(test.durString)
-		actual := lagrangeUnitFromDuration(dur)
+		actual := cubicSplineUnitFromDuration(dur)
 		equals(t, test.expectedfloatTime, actual)
 	}
 }
 
-func Test_durationFromLagrangeUnit(t *testing.T) {
+func Test_durationFromCubicSplineUnit(t *testing.T) {
 	tests := []struct {
 		floatTime         float64
 		expectedDurString string
@@ -50,7 +50,7 @@ func Test_durationFromLagrangeUnit(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual := durationFromLagrangeUnit(test.floatTime)
+		actual := durationFromCubicSplineUnit(test.floatTime)
 		equals(t, test.expectedDurString, actual.String())
 	}
 }
