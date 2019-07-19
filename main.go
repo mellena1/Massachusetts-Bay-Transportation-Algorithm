@@ -3,12 +3,13 @@ package main
 import (
 	"io/ioutil"
 	"log"
+	"time"
 
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
 func main() {
-	datacollection.GetStopCoordinatesForGoogleAPI()
+	// datacollection.GetStopCoordinatesForGoogleAPI()
 
 	// endpoints := calculation.GetEndpointStops()
 
@@ -16,11 +17,15 @@ func main() {
 	// 	log.Fatalf("No endpoints returned")
 	// }
 
-	// loc, err := time.LoadLocation("America/New_York")
-	// if err != nil {
-	// 	log.Fatalf("A fatal error occurred: %s", err)
-	// }
-	// startTime := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc)
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		log.Fatalf("A fatal error occurred: %s", err)
+	}
+	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
+	endTime := time.Date(2019, time.July, 25, 0, 0, 0, 0, loc)
+	interval := time.Minute * 30
+
+	datacollection.GetTransitDataWithGoogleAPI(startTime, endTime, interval)
 
 	// timeFunctions := getCubicSplineFuncs()
 
