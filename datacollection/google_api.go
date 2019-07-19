@@ -30,7 +30,7 @@ func GetEdgeKeyWalking(stopA, stopB *Stop) string {
 
 // GetTransitDataFilename returns the filename that represents this data
 func GetTransitDataFilename(startTime time.Time, interval time.Duration) string {
-	return "EdgeData StartTime:" + strconv.FormatInt(startTime.Unix(), 10) + " Interval:" + interval.String()
+	return "datacollection/EdgeData StartTime:" + strconv.FormatInt(startTime.Unix(), 10) + " Interval:" + interval.String() + ".json"
 }
 
 func readAPIKey() string {
