@@ -1,90 +1,70 @@
-[
-    {
-        "edge": "Boston College:Cleveland Circle",
+{
+    "Boston College:Cleveland Circle": {
         "middle-stop": "Kenmore"
     },
-    {
-        "edge": "Boston College:Riverside",
+    "Boston College:Riverside": {
         "middle-stop": "Kenmore"
     },
-    {
-        "edge": "Boston College:Heath Street",
+    "Boston College:Heath Street": {
         "middle-stop": "Copley"
     },
-    {
-        "edge": "Boston College:Forest Hills",
+    "Boston College:Forest Hills": {
         "middle-stop": "Downtown Crossing"
     },
 
 
-    {
-        "edge": "Cleveland Circle:Boston College",
+    "Cleveland Circle:Boston College": {
         "middle-stop": "Kenmore"
     },
-    {
-        "edge": "Cleveland Circle:Riverside",
+    "Cleveland Circle:Riverside": {
         "middle-stop": "Kenmore"
     },
-    {
-        "edge": "Cleveland Circle:Heath Street",
+    "Cleveland Circle:Heath Street": {
         "middle-stop": "Copley"
     },
-    {
-        "edge": "Cleveland Circle:Forest Hills",
-        "middle-stop": "Downtown Crossing"
-    },
-
-    
-    {
-        "edge": "Riverside:Boston College",
-        "middle-stop": "Kenmore"
-    },
-    {
-        "edge": "Riverside:Cleveland Circle",
-        "middle-stop": "Kenmore"
-    },
-    {
-        "edge": "Riverside:Heath Street",
-        "middle-stop": "Copley"
-    },
-    {
-        "edge": "Riverside:Forest Hills",
+    "Cleveland Circle:Forest Hills": {
         "middle-stop": "Downtown Crossing"
     },
 
 
-    {
-        "edge": "Heath Street:Boston College",
+    "Riverside:Boston College": {
+        "middle-stop": "Kenmore"
+    },
+    "Riverside:Cleveland Circle": {
+        "middle-stop": "Kenmore"
+    },
+    "Riverside:Heath Street": {
         "middle-stop": "Copley"
     },
-    {
-        "edge": "Heath Street:Cleveland Circle",
-        "middle-stop": "Copley"
-    },
-    {
-        "edge": "Heath Street:Riverside",
-        "middle-stop": "Copley"
-    },
-    {
-        "edge": "Heath Street:Forest Hills",
+    "Riverside:Forest Hills": {
         "middle-stop": "Downtown Crossing"
     },
 
 
-    {
-        "edge": "Forest Hills:Boston College",
+    "Heath Street:Boston College": {
+        "middle-stop": "Copley"
+    },
+    "Heath Street:Cleveland Circle": {
+        "middle-stop": "Copley"
+    },
+    "Heath Street:Riverside": {
+        "middle-stop": "Copley"
+    },
+    "Heath Street:Forest Hills": {
+        "middle-stop": "Downtown Crossing"
+    },
+
+
+    "Forest Hills:Boston College": {
         "middle-stop": "Park Street"
     },
-    {
-        "edge": "Forest Hills:Cleveland Circle",
+    "Forest Hills:Cleveland Circle": {
         "middle-stop": "Park Street"
     },
-    {
-        "edge": "Forest Hills:Riverside",
+    "Forest Hills:Riverside": {
         "middle-stop": "Park Street"
     },
-    {
-        "edge": "Forest Hills:Heath Street",
+    "Forest Hills:Heath Street": {
         "middle-stop": "Park Street"
     }
-]
+}
