@@ -53,7 +53,7 @@ func GetStopCoordinatesForGoogleAPI() {
 		}
 	}
 
-	err = ExportSpecialEdgesLocationData(MiddleStopNameStopMap)
+	err = ExportSpecialEdgesLocationData(specialEdges)
 	if err != nil {
 		log.Fatalf("Failed to export stop location data: %s", err)
 	}
