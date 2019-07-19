@@ -73,7 +73,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 					midToB := makeAPICall(midStop, stopB, interval, startTime, endTime, mapsClient)
 
 					fullEdgeTime := make(EdgeTime, len(aToMid))
-					for k, _ := range aToMid {
+					for k := range aToMid {
 						fullEdgeTime[k] = aToMid[k] + midToB[k]
 					}
 					edges[GetEdgeKey(stopA, stopB)] = fullEdgeTime
