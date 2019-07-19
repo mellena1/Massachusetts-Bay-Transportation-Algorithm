@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cnkei/gospline"
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
@@ -17,19 +18,14 @@ import (
 
 type CubicSplineFunctionsHolder map[string]gospline.Spline
 
-// GetEdgeKey returns the map key for an edge between two stops
-func GetEdgeKey(stopA, stopB Stop) string {
-	return stopA.Name + ":" + stopB.Name
-}
-
 // MakeCubicSplineFunctionForAllEdges returns a map of edges to CubicSpline time functions, key is the name of both stops seperated by a colon
-func MakeCubicSplineFunctionForAllEdges(stops []Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) CubicSplineFunctionsHolder {
+func MakeCubicSplineFunctionForAllEdges(stops []*datacollection.Stop, interval time.Duration, startTime, endTime time.Time, edges datacollection.Edges) CubicSplineFunctionsHolder {
 	numStops := len(stops) - 1
 	cubicSplineFunctions := make(CubicSplineFunctionsHolder, numStops*numStops)
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				cubicSplineFunctions[getLFHKey(stopA, stopB)] = MakeCubicSplineFunctionForEdge(stopA, stopB, interval, startTime, endTime, edges)
+				cubicSplineFunctions[datacollection.GetEdgeKey(stopA, stopB)] = MakeCubicSplineFunctionForEdge(stopA, stopB, interval, startTime, endTime, edges)
 			}
 		}
 		log.Printf("Done with %s", stopA.Name)
@@ -38,12 +34,12 @@ func MakeCubicSplineFunctionForAllEdges(stops []Stop, interval time.Duration, st
 	return cubicSplineFunctions
 }
 
-func ReadAPICalls(filename string) (Edges, error) {
+func ReadAPICalls(filename string) (datacollection.Edges, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	edges := make(Edges)
+	edges := make(datacollection.Edges)
 	err = json.Unmarshal(data, &edges)
 	if err != nil {
 		return nil, err
@@ -118,7 +114,7 @@ func PlotAllCubicSplineFuncs(cubicSplineFuncs CubicSplineFunctionsHolder, filena
 	return p.Save(24*vg.Inch, 24*vg.Inch, filename)
 }
 
-func MakeCubicSplineFunctionForEdge(stopA, stopB Stop, interval time.Duration, startTime, endTime time.Time, edges Edges) gospline.Spline {
+func MakeCubicSplineFunctionForEdge(stopA, stopB *datacollection.Stop, interval time.Duration, startTime, endTime time.Time, edges datacollection.Edges) gospline.Spline {
 	x := []float64{}
 	y := []float64{}
 
@@ -126,7 +122,7 @@ func MakeCubicSplineFunctionForEdge(stopA, stopB Stop, interval time.Duration, s
 		newXVal := CubicSplineUnitFromTime(curTime)
 		x = append(x, newXVal)
 
-		edgeTime := edges[getLFHKey(stopA, stopB)][curTime.Unix()]
+		edgeTime := edges[datacollection.GetEdgeKey(stopA, stopB)][curTime.Unix()]
 		newYVal := CubicSplineUnitFromDuration(edgeTime)
 		y = append(y, newYVal)
 	}
