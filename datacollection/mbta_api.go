@@ -25,11 +25,6 @@ func GetStopCoordinatesForGoogleAPI() {
 		log.Fatalf("Failed to import special edges data: %s", err)
 	}
 
-	MiddleStopNameStopMap := make(map[string]*Stop, len(specialEdges))
-	for _, middleStop := range specialEdges {
-		MiddleStopNameStopMap[middleStop.Name] = middleStop
-	}
-
 	endpoints, err := ImportStopsFromFile(Endpoints)
 	if err != nil {
 		log.Fatalf("Failed to import endpoint list: %s", err)
@@ -48,8 +43,10 @@ func GetStopCoordinatesForGoogleAPI() {
 			endpointStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
 			continue
 		}
-		if middleStop, ok := MiddleStopNameStopMap[stop.Name]; ok {
-			middleStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
+		for _, middleStop := range specialEdges {
+			if stop.Name == middleStop.Name {
+				middleStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
+			}
 		}
 	}
 
