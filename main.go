@@ -22,21 +22,22 @@ func main() {
 	}
 	startTime := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc)
 
-	// timeFunctions, err := calculation.ReadLagrangeFunctionsFromFile("lagrangeFunctions.json")
+	// timeFunctions, err := calculation.ReadCubicSplineFunctionsFromFile("cubicSplineFunctions.json")
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 
-	timeFunctions := getLagrangeFuncs()
+	timeFunctions := getCubicSplineFuncs()
 
-	// dur := calculation.GetDurationForEdgeFromLagrange(timeFunctions["Riverside:Bowdoin"], time.Date(2019, time.July, 18, 6, 1, 0, 0, loc))
+	// dur := calculation.GetDurationForEdgeFromCubicSpline(timeFunctions["Riverside:Bowdoin"], time.Date(2019, time.July, 18, 6, 1, 0, 0, loc))
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 	// fmt.Println(dur.Hours())
 
-	// calculation.PlotLagrangeFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
-	// calculation.PlotLagrangeFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
+	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
 
 	calc, err := calculation.NewCalculator(timeFunctions)
 	if err != nil {
@@ -59,7 +60,7 @@ func readAPIKey(filename string) string {
 	return string(data)
 }
 
-func getLagrangeFuncs() calculation.LagrangeFunctionsHolder {
+func getCubicSplineFuncs() calculation.CubicSplineFunctionsHolder {
 	endpoints := calculation.GetEndpointStops()
 
 	if len(endpoints) == 0 {
@@ -74,16 +75,16 @@ func getLagrangeFuncs() calculation.LagrangeFunctionsHolder {
 	endTime := time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)
 	interval := time.Minute * 30
 
-	lagrangeCalc, err := calculation.NewLagrange(readAPIKey("apikey.secret"))
+	cubicSplineCalc, err := calculation.NewCubicSpline(readAPIKey("apikey.secret"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	edges, _ := calculation.ReadAPICalls("edgesAPICalls_Thursday.json")
-	lagranges := lagrangeCalc.MakeLagrangeFunctionForAllEdges(endpoints, interval, startTime, endTime, edges)
-	// calculation.WriteLangrageFunctionsToFile(lagranges, "lagrangeFunctionsCubicSplines.json")
+	cubicSplines := cubicSplineCalc.MakeCubicSplineFunctionForAllEdges(endpoints, interval, startTime, endTime, edges)
+	// calculation.WriteCubicSplineFunctionsToFile(cubicSplines, "cubicSplineFunctions.json")
 
-	// lagrangeCalc.SaveAPICalls(endpoints, interval, startTime, endTime, "edgesAPICalls.json")
+	// cubicSplineCalc.SaveAPICalls(endpoints, interval, startTime, endTime, "edgesAPICalls.json")
 
-	return lagranges
+	return cubicSplines
 }
