@@ -1,49 +1,57 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"time"
 
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/calculation"
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
 func main() {
 	// datacollection.GetStopCoordinatesForGoogleAPI()
 
-	// endpoints := calculation.GetEndpointStops()
+	endpoints, err := datacollection.ImportStopsFromFileNonePointer(datacollection.Endpoints)
+	if err != nil {
+		log.Fatalf("can't read endpoints: %s", err)
+	}
 
 	// if len(endpoints) == 0 {
 	// 	log.Fatalf("No endpoints returned")
 	// }
 
-	loc, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		log.Fatalf("A fatal error occurred: %s", err)
-	}
-	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
-	endTime := time.Date(2019, time.July, 25, 0, 0, 0, 0, loc)
-	interval := time.Minute * 30
+	// loc, _ := time.LoadLocation("America/New_York")
+	// startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
+	// endTime := time.Date(2019, time.July, 25, 0, 0, 0, 0, loc)
+	// interval := time.Minute * 30
 
-	datacollection.GetTransitDataWithGoogleAPI(startTime, endTime, interval)
-
-	// timeFunctions := getCubicSplineFuncs()
+	// datacollection.GetTransitDataWithGoogleAPI(startTime, endTime, interval)
 
 	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
 	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
 	// calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
 
-	// calc, err := calculation.NewCalculator(timeFunctions)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// route, duration := calc.FindBestRoute(endpoints, startTime)
+	edgeData, err := datacollection.ImportEdgeData("EdgeData StartTime:1563962400 Interval:30m0s")
+	if err != nil {
+		log.Fatalf("failed reading in edge data: %s", err)
+	}
 
-	// fmt.Printf("Trip Duration: %v\n", duration)
+	calc, err := calculation.NewCalculator(edgeData)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// for i, stop := range route {
-	// 	fmt.Printf("%d: %s\n", i, stop.Name)
-	// }
+	loc, _ := time.LoadLocation("America/New_York")
+	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
+	route, duration := calc.FindBestRoute(endpoints, startTime)
+
+	fmt.Printf("Trip Duration: %v\n", duration)
+
+	for i, stop := range route {
+		fmt.Printf("%d: %s\n", i, stop.Name)
+	}
 }
 
 func readAPIKey(filename string) string {

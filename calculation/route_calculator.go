@@ -17,8 +17,8 @@ type Calculator struct {
 	bestRoute          []datacollection.Stop
 }
 
-func NewCalculator(timeFunctions CubicSplineFunctionsHolder) (*Calculator, error) {
-	return &Calculator{timeFunctions: timeFunctions, bestTime: (time.Hour * 1000)}, nil
+func NewCalculator(edgeData datacollection.Edges) (*Calculator, error) {
+	return &Calculator{timeFunctions: MakeCubicSplineFunctionForAllEdges(edgeData), bestTime: (time.Hour * 1000)}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop

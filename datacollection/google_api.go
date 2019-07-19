@@ -89,6 +89,19 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	ioutil.WriteFile(GetTransitDataFilename(startTime, interval), data, 0644)
 }
 
+func ImportEdgeData(filename string) (Edges, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	edges := make(Edges)
+	err = json.Unmarshal(data, &edges)
+	if err != nil {
+		return nil, err
+	}
+	return edges, nil
+}
+
 func makeAPICall(stopA, stopB *Stop, interval time.Duration, startTime, endTime time.Time, mapsClient *maps.Client) EdgeTimes {
 	edgeTimes := make(EdgeTimes)
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {

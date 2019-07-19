@@ -1,10 +1,9 @@
 package calculation
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/cnkei/gospline"
@@ -19,51 +18,14 @@ import (
 type CubicSplineFunctionsHolder map[string]gospline.Spline
 
 // MakeCubicSplineFunctionForAllEdges returns a map of edges to CubicSpline time functions, key is the name of both stops seperated by a colon
-func MakeCubicSplineFunctionForAllEdges(stops []*datacollection.Stop, interval time.Duration, startTime, endTime time.Time, edges datacollection.Edges) CubicSplineFunctionsHolder {
-	numStops := len(stops) - 1
-	cubicSplineFunctions := make(CubicSplineFunctionsHolder, numStops*numStops)
-	for i, stopA := range stops {
-		for j, stopB := range stops {
-			if i != j {
-				cubicSplineFunctions[datacollection.GetEdgeKey(stopA, stopB)] = MakeCubicSplineFunctionForEdge(stopA, stopB, interval, startTime, endTime, edges)
-			}
-		}
-		log.Printf("Done with %s", stopA.Name)
+func MakeCubicSplineFunctionForAllEdges(edges datacollection.Edges) CubicSplineFunctionsHolder {
+	cubicSplineFunctions := make(CubicSplineFunctionsHolder)
+
+	for edge, edgeTimings := range edges {
+		cubicSplineFunctions[edge] = MakeCubicSplineFunctionForEdge(edgeTimings)
 	}
 
 	return cubicSplineFunctions
-}
-
-func ReadAPICalls(filename string) (datacollection.Edges, error) {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	edges := make(datacollection.Edges)
-	err = json.Unmarshal(data, &edges)
-	if err != nil {
-		return nil, err
-	}
-	return edges, nil
-}
-
-func WriteCubicSplineFunctionsToFile(cubicSplines CubicSplineFunctionsHolder, filename string) error {
-	data, err := json.Marshal(cubicSplines)
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(filename, data, 0644)
-	return err
-}
-
-func ReadCubicSplineFunctionsFromFile(filename string) (CubicSplineFunctionsHolder, error) {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	cubicSplines := make(CubicSplineFunctionsHolder)
-	err = json.Unmarshal(data, &cubicSplines)
-	return cubicSplines, err
 }
 
 func PlotCubicSplineFunc(cubicSplineFunc gospline.Spline, filename string) error {
@@ -114,23 +76,35 @@ func PlotAllCubicSplineFuncs(cubicSplineFuncs CubicSplineFunctionsHolder, filena
 	return p.Save(24*vg.Inch, 24*vg.Inch, filename)
 }
 
-func MakeCubicSplineFunctionForEdge(stopA, stopB *datacollection.Stop, interval time.Duration, startTime, endTime time.Time, edges datacollection.Edges) gospline.Spline {
-	x := []float64{}
-	y := []float64{}
-
-	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
-		newXVal := CubicSplineUnitFromTime(curTime)
-		x = append(x, newXVal)
-
-		edgeTime := edges[datacollection.GetEdgeKey(stopA, stopB)][curTime.Unix()]
-		newYVal := CubicSplineUnitFromDuration(edgeTime)
-		y = append(y, newYVal)
+func MakeCubicSplineFunctionForEdge(edgeTiming datacollection.EdgeTimes) gospline.Spline {
+	type xy struct {
+		x float64
+		y float64
 	}
 
-	approx := gospline.NewCubicSpline(x, y)
-	// approx.Fit(x, y) // could return error, but only if x and y are different lengths. In this case they won't be
+	xyPoints := []xy{}
+	for unixTime, duration := range edgeTiming {
+		xTime := time.Unix(unixTime, 0)
 
-	return approx
+		newPoint := xy{
+			x: CubicSplineUnitFromTime(xTime),
+			y: CubicSplineUnitFromDuration(duration),
+		}
+		xyPoints = append(xyPoints, newPoint)
+	}
+	// x values must be in ascending order
+	sort.Slice(xyPoints, func(i int, j int) bool {
+		return xyPoints[i].x < xyPoints[j].x
+	})
+
+	x := make([]float64, len(xyPoints))
+	y := make([]float64, len(xyPoints))
+	for i, point := range xyPoints {
+		x[i] = point.x
+		y[i] = point.y
+	}
+
+	return gospline.NewCubicSpline(x, y)
 }
 
 func GetDurationForEdgeFromCubicSpline(approxFunc gospline.Spline, startTime time.Time) time.Duration {
