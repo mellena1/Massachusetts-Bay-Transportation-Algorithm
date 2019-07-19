@@ -12,7 +12,7 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-// EdgeTimes stores the time each edge took to traverse
+// EdgeTimes stores the time each edge took to traverse (unix time -> duration for that time)
 type EdgeTimes map[int64]time.Duration
 
 // Edges a map of all edges by edge key
@@ -21,6 +21,11 @@ type Edges map[string]EdgeTimes
 // GetEdgeKey returns the map key for an edge between two stops
 func GetEdgeKey(stopA, stopB *Stop) string {
 	return stopA.Name + ":" + stopB.Name
+}
+
+// GetEdgeKeyWalking returns the map key for an edge between two stops with walking
+func GetEdgeKeyWalking(stopA, stopB *Stop) string {
+	return stopA.Name + ":" + stopB.Name + "-Walking"
 }
 
 // GetTransitDataFilename returns the filename that represents this data
@@ -43,6 +48,11 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 		log.Fatalf("Failed to import stop location data: %s", err)
 	}
 
+	specialEdges, err := ReadSpecialEdgesFromFile(SpecialEdgesFile)
+	if err != nil {
+		log.Fatalf("Failed to import special edges data: %s", err)
+	}
+
 	apiKey := readAPIKey()
 	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
@@ -54,7 +64,22 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				edges[GetEdgeKey(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+				if edge, ok := specialEdges[GetEdgeKey(stopA, stopB)]; ok {
+					// Walking
+					edges[GetEdgeKeyWalking(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+
+					// Transit
+					aToMid := makeAPICall(stopA, midStop, interval, startTime, endTime, mapsClient)
+					midToB := makeAPICall(midStop, stopB, interval, startTime, endTime, mapsClient)
+
+					fullEdgeTime := make(EdgeTime, len(aToMid))
+					for k, _ := range aToMid {
+						fullEdgeTime[k] = aToMid[k] + midToB[k]
+					}
+					edges[GetEdgeKey(stopA, stopB)] = fullEdgeTime
+				} else {
+					edges[GetEdgeKey(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+				}
 			}
 		}
 		log.Printf("Done with %s", stopA.Name)

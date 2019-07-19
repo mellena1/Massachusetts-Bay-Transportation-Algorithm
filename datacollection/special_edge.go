@@ -13,9 +13,17 @@ type SpecialEdge struct {
 // SpecialEdges holds which edges need a stop in between them (and can also walk between them)
 type SpecialEdges map[string]SpecialEdge
 
+// SpecialEdgeFiles enum for files containing special edges
+type SpecialEdgeFiles string
+
+const (
+	// SpecialEdges the file that stores the edges with multiple ways to go
+	SpecialEdgesFile SpecialEdgeFiles = "datacollection/special_edges.json"
+)
+
 // ReadSpecialEdgesFromFile reads in the special edges from a file (probably special_edges.json)
-func ReadSpecialEdgesFromFile(filename string) (SpecialEdges, error) {
-	data, err := ioutil.ReadFile(filename)
+func ReadSpecialEdgesFromFile(filename SpecialEdgeFiles) (SpecialEdges, error) {
+	data, err := ioutil.ReadFile(string(filename))
 	if err != nil {
 		return nil, err
 	}

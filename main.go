@@ -1,5 +1,12 @@
 package main
 
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"time"
+)
+
 func main() {
 	endpoints := calculation.GetEndpointStops()
 
