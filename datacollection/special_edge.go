@@ -5,13 +5,8 @@ import (
 	"io/ioutil"
 )
 
-// SpecialEdge is a struct holding the MiddleEdgeID
-type SpecialEdge struct {
-	MiddleEdgeID string `json:"middle-stop"`
-}
-
 // SpecialEdges holds which edges need a stop in between them (and can also walk between them)
-type SpecialEdges map[string]SpecialEdge
+type SpecialEdges map[string]*Stop
 
 // SpecialEdgeFiles enum for files containing special edges
 type SpecialEdgeFiles string
@@ -19,6 +14,8 @@ type SpecialEdgeFiles string
 const (
 	// SpecialEdgesFile the file that stores the edges with multiple ways to go
 	SpecialEdgesFile SpecialEdgeFiles = "datacollection/special_edges.json"
+	// SpecialEdgesFileWithLocationData the file that stores the edges with multiple ways to go and the middle stop locations
+	SpecialEdgesFileWithLocationData SpecialEdgeFiles = "datacollection/special_edges_with_location_data.json"
 )
 
 // ReadSpecialEdgesFromFile reads in the special edges from a file (probably special_edges.json)

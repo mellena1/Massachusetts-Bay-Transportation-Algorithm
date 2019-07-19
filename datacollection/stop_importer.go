@@ -13,7 +13,7 @@ const (
 	// Endpoints the file that stores the endpoint names
 	Endpoints StopFiles = "datacollection/endpoint_stops.json"
 	// StopLocations the files that stores the locations of mbta stops
-	StopLocations StopFiles = "datacollection/stop_locations.json"	
+	StopLocations StopFiles = "datacollection/stop_locations.json"
 )
 
 // ImportStopsFromFile imports a list of stop data

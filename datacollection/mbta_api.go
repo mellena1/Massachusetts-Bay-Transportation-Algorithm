@@ -14,15 +14,25 @@ func GetStopCoordinatesForGoogleAPI() {
 		APIKey: "",
 	})
 
-	endpoints, err := ImportStopsFromFile(Endpoints)
-	if err != nil {
-		log.Fatalf("Failed to import endpoint list: %s", err)
-	}
-
 	reqConfig := mbta.GetAllStopsRequestConfig{}
 	stops, _, err := mbtaClient.Stops.GetAllStops(&reqConfig)
 	if err != nil {
 		log.Fatalf("Failed to get stops from mbta API: %s", err)
+	}
+
+	specialEdges, err := ReadSpecialEdgesFromFile(SpecialEdgesFile)
+	if err != nil {
+		log.Fatalf("Failed to import special edges data: %s", err)
+	}
+
+	MiddleStopNameStopMap := make(map[string]*Stop, len(specialEdges))
+	for _, middleStop := range specialEdges {
+		MiddleStopNameStopMap[middleStop.Name] = middleStop
+	}
+
+	endpoints, err := ImportStopsFromFile(Endpoints)
+	if err != nil {
+		log.Fatalf("Failed to import endpoint list: %s", err)
 	}
 
 	endpointNameStopMap := make(map[string]*Stop, len(endpoints))
@@ -36,13 +46,34 @@ func GetStopCoordinatesForGoogleAPI() {
 		}
 		if endpointStop, ok := endpointNameStopMap[stop.Name]; ok {
 			endpointStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
+			continue
 		}
+		if middleStop, ok := MiddleStopNameStopMap[stop.Name]; ok {
+			middleStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
+		}
+	}
+
+	err = ExportSpecialEdgesLocationData(MiddleStopNameStopMap)
+	if err != nil {
+		log.Fatalf("Failed to export stop location data: %s", err)
 	}
 
 	err = ExportLocationData(endpoints)
 	if err != nil {
 		log.Fatalf("Failed to export stop location data: %s", err)
 	}
+}
+
+// ExportSpecialEdgesLocationData exorts the location data from the mbta API for the middle stops of special edges
+func ExportSpecialEdgesLocationData(specialEdges SpecialEdges) error {
+	data, err := json.Marshal(specialEdges)
+	if err != nil {
+		return err
+	}
+
+	ioutil.WriteFile(string(SpecialEdgesFileWithLocationData), data, 0644)
+
+	return nil
 }
 
 // ExportLocationData exorts the location data from the mbta API

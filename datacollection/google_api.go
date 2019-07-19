@@ -48,7 +48,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 		log.Fatalf("Failed to import stop location data: %s", err)
 	}
 
-	specialEdges, err := ReadSpecialEdgesFromFile(SpecialEdgesFile)
+	specialEdges, err := ReadSpecialEdgesFromFile(SpecialEdgesFileWithLocationData)
 	if err != nil {
 		log.Fatalf("Failed to import special edges data: %s", err)
 	}
