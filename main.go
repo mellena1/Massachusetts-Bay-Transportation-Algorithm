@@ -1,6 +1,43 @@
 package main
 
 func main() {
+	endpoints := calculation.GetEndpointStops()
+
+	if len(endpoints) == 0 {
+		log.Fatalf("No endpoints returned")
+	}
+
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		log.Fatalf("A fatal error occurred: %s", err)
+	}
+	startTime := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc)
+
+	timeFunctions := getCubicSplineFuncs()
+
+	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
+	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	// calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
+
+	calc, err := calculation.NewCalculator(timeFunctions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	route, duration := calc.FindBestRoute(endpoints, startTime)
+
+	fmt.Printf("Trip Duration: %v\n", duration)
+
+	for i, stop := range route {
+		fmt.Printf("%d: %s\n", i, stop.Name)
+	}
+}
+
+func readAPIKey(filename string) string {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatalf("Can't read api key: %v", err)
+	}
+	return string(data)
 }
 
 // func omain() {

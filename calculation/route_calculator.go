@@ -12,6 +12,7 @@ type Calculator struct {
 	timeFunctions      CubicSplineFunctionsHolder
 	startTime          time.Time
 	bestTime           time.Duration
+	bestRoute          []Stop
 }
 
 func NewCalculator(timeFunctions CubicSplineFunctionsHolder) (*Calculator, error) {
@@ -28,17 +29,26 @@ func (c *Calculator) FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, t
 	return c.findBestRouteHelper(route, stops)
 }
 
+func printStops(stops []Stop) string {
+	str := "["
+	for _, stop := range stops {
+		str += stop.Name + ","
+	}
+	return str[:len(str)-1] + "]"
+}
+
 func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]Stop, time.Duration) {
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
 		if duration.Minutes() < c.bestTime.Minutes() {
 			c.bestTime = duration
+			c.bestRoute = curRoute
 		}
 		if c.numberOfRoutes%1000000 == 0 {
 			elapsed := time.Since(c.startTime)
 			c.startTime = time.Now()
-			fmt.Printf("Routes Tested: %d\nBest Time: %v\n", c.numberOfRoutes, c.bestTime)
+			fmt.Printf("Routes Tested: %d\nBest Time: %v Route: %s\n", c.numberOfRoutes, c.bestTime, printStops(c.bestRoute))
 			fmt.Printf("Time taken to calculate: %s\n\n", elapsed)
 		}
 		return curRoute, duration
