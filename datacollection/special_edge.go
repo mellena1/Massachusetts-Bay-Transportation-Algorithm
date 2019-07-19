@@ -1,4 +1,4 @@
-package graph
+package datacollection
 
 import (
 	"encoding/json"
@@ -17,7 +17,7 @@ type SpecialEdges map[string]SpecialEdge
 type SpecialEdgeFiles string
 
 const (
-	// SpecialEdges the file that stores the edges with multiple ways to go
+	// SpecialEdgesFile the file that stores the edges with multiple ways to go
 	SpecialEdgesFile SpecialEdgeFiles = "datacollection/special_edges.json"
 )
 
