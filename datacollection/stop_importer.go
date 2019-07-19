@@ -32,3 +32,20 @@ func ImportStopsFromFile(filename StopFiles) ([]*Stop, error) {
 	json.Unmarshal(bytes, &stops)
 	return stops, nil
 }
+
+// ImportStopsFromFileNonePointer imports a list of stop data
+func ImportStopsFromFileNonePointer(filename StopFiles) ([]Stop, error) {
+	file, err := os.Open(string(filename))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	var stops []Stop
+	json.Unmarshal(bytes, &stops)
+	return stops, nil
+}

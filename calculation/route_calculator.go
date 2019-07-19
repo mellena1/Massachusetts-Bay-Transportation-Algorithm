@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
 type Calculator struct {
@@ -12,7 +14,7 @@ type Calculator struct {
 	timeFunctions      CubicSplineFunctionsHolder
 	startTime          time.Time
 	bestTime           time.Duration
-	bestRoute          []Stop
+	bestRoute          []datacollection.Stop
 }
 
 func NewCalculator(timeFunctions CubicSplineFunctionsHolder) (*Calculator, error) {
@@ -20,16 +22,16 @@ func NewCalculator(timeFunctions CubicSplineFunctionsHolder) (*Calculator, error
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
-func (c *Calculator) FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, time.Duration) {
+func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.Time) ([]datacollection.Stop, time.Duration) {
 	c.numberOfRoutes = 0
 	c.startTimeForRoutes = startTime
 
-	route := make([]Stop, 0)
+	route := make([]datacollection.Stop, 0)
 	c.startTime = time.Now()
 	return c.findBestRouteHelper(route, stops)
 }
 
-func printStops(stops []Stop) string {
+func printStops(stops []datacollection.Stop) string {
 	str := "["
 	for _, stop := range stops {
 		str += stop.Name + ","
@@ -37,7 +39,7 @@ func printStops(stops []Stop) string {
 	return str[:len(str)-1] + "]"
 }
 
-func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]Stop, time.Duration) {
+func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []datacollection.Stop) ([]datacollection.Stop, time.Duration) {
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
@@ -54,7 +56,7 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 		return curRoute, duration
 	}
 
-	var bestRoute []Stop
+	var bestRoute []datacollection.Stop
 	var bestDuration time.Duration
 	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
@@ -69,14 +71,14 @@ func (c *Calculator) findBestRouteHelper(curRoute []Stop, stopsLeft []Stop) ([]S
 	return bestRoute, bestDuration
 }
 
-func removeIndex(index int, list []Stop) []Stop {
-	newList := make([]Stop, 0)
+func removeIndex(index int, list []datacollection.Stop) []datacollection.Stop {
+	newList := make([]datacollection.Stop, 0)
 	newList = append(newList, list[:index]...)
 	newList = append(newList, list[index+1:]...)
 	return newList
 }
 
-func (c *Calculator) findRouteTime(route []Stop) time.Duration {
+func (c *Calculator) findRouteTime(route []datacollection.Stop) time.Duration {
 	var duration time.Duration
 	for i := 0; i < len(route)-1; i++ {
 		duration += c.findEdgeTime(route[i], route[i+1], c.startTimeForRoutes.Add(duration))
@@ -84,8 +86,8 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 	return duration
 }
 
-func (c *Calculator) findEdgeTime(stopA Stop, stopB Stop, startTime time.Time) time.Duration {
-	cubicSpline := c.timeFunctions[getLFHKey(stopA, stopB)]
+func (c *Calculator) findEdgeTime(stopA, stopB datacollection.Stop, startTime time.Time) time.Duration {
+	cubicSpline := c.timeFunctions[datacollection.GetEdgeKey(&stopA, &stopB)]
 	dur := GetDurationForEdgeFromCubicSpline(cubicSpline, startTime)
 	if dur.Hours() > 3 {
 		log.Printf("time: %s stopA: %s stopB: %s bad: %d", startTime.String(), stopA.Name, stopB.Name, int(dur.Hours()))
