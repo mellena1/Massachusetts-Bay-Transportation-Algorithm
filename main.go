@@ -33,7 +33,7 @@ func main() {
 	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
 	// calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
 
-	edgeData, err := datacollection.ImportEdgeData("EdgeData StartTime:1563962400 Interval:30m0s")
+	edgeData, err := datacollection.ImportEdgeData("EdgeData StartTime:1563962400 Interval:30m0s.json")
 	if err != nil {
 		log.Fatalf("failed reading in edge data: %s", err)
 	}
