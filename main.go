@@ -22,22 +22,11 @@ func main() {
 	}
 	startTime := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc)
 
-	// timeFunctions, err := calculation.ReadCubicSplineFunctionsFromFile("cubicSplineFunctions.json")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
 	timeFunctions := getCubicSplineFuncs()
 
-	// dur := calculation.GetDurationForEdgeFromCubicSpline(timeFunctions["Riverside:Bowdoin"], time.Date(2019, time.July, 18, 6, 1, 0, 0, loc))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println(dur.Hours())
-
-	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
-	calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
-	calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
+	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Bowdoin"], "riverside-bowdoin.png")
+	// calculation.PlotCubicSplineFunc(timeFunctions["Riverside:Braintree"], "riverside-braintree.png")
+	// calculation.PlotAllCubicSplineFuncs(timeFunctions, "AllRoutes.png")
 
 	calc, err := calculation.NewCalculator(timeFunctions)
 	if err != nil {
