@@ -64,7 +64,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				if edge, ok := specialEdges[GetEdgeKey(stopA, stopB)]; ok {
+				if midStop, ok := specialEdges[GetEdgeKey(stopA, stopB)]; ok {
 					// Walking
 					edges[GetEdgeKeyWalking(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
 
