@@ -1,70 +1,70 @@
 {
     "Boston College:Cleveland Circle": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Boston College:Riverside": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Boston College:Heath Street": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Boston College:Forest Hills": {
-        "middle-stop": "Downtown Crossing"
+        "name": "Downtown Crossing"
     },
 
 
     "Cleveland Circle:Boston College": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Cleveland Circle:Riverside": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Cleveland Circle:Heath Street": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Cleveland Circle:Forest Hills": {
-        "middle-stop": "Downtown Crossing"
+        "name": "Downtown Crossing"
     },
 
 
     "Riverside:Boston College": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Riverside:Cleveland Circle": {
-        "middle-stop": "Kenmore"
+        "name": "Kenmore"
     },
     "Riverside:Heath Street": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Riverside:Forest Hills": {
-        "middle-stop": "Downtown Crossing"
+        "name": "Downtown Crossing"
     },
 
 
     "Heath Street:Boston College": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Heath Street:Cleveland Circle": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Heath Street:Riverside": {
-        "middle-stop": "Copley"
+        "name": "Copley"
     },
     "Heath Street:Forest Hills": {
-        "middle-stop": "Downtown Crossing"
+        "name": "Downtown Crossing"
     },
 
 
     "Forest Hills:Boston College": {
-        "middle-stop": "Park Street"
+        "name": "Park Street"
     },
     "Forest Hills:Cleveland Circle": {
-        "middle-stop": "Park Street"
+        "name": "Park Street"
     },
     "Forest Hills:Riverside": {
-        "middle-stop": "Park Street"
+        "name": "Park Street"
     },
     "Forest Hills:Heath Street": {
-        "middle-stop": "Park Street"
+        "name": "Park Street"
     }
 }
