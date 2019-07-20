@@ -21,7 +21,7 @@ func dataCollectionStopToCalcStop(dataStops []datacollection.Stop) []Stop {
 }
 
 func canWalkToNextStop(route []Stop, nextStop Stop, timeFunctions CubicSplineFunctionsHolder, isLastStop bool) bool {
-	if len(route) == 1 { // can't go if it is first stop
+	if len(route) <= 1 { // can't go if it is first stop, and don't run if route is len 0
 		return false
 	}
 	if isLastStop { // can't go if it is last stop
