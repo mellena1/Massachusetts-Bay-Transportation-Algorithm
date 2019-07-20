@@ -69,16 +69,16 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
 	for i := range stopsLeft {
-		// newRoute := cloneRouteSlice(curRoute)
-		route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
+		newRoute := cloneRouteSlice(curRoute)
+		route, duration := c.findBestRouteHelper(append(newRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 		if duration < bestDuration {
 			bestRoute = route
 			bestDuration = duration
 		}
 		if canWalkToNextStop(curRoute, stopsLeft[i], c.timeFunctions, len(stopsLeft) == 1) {
-			newRoute := append(curRoute, stopsLeft[i])
-			newRoute[len(newRoute)-2].WalkToNextStop = true
-			route, duration := c.findBestRouteHelper(newRoute, removeIndex(i, stopsLeft))
+			newRoute := cloneRouteSlice(curRoute)
+			newRoute[len(newRoute)-1].WalkToNextStop = true
+			route, duration := c.findBestRouteHelper(append(newRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 			if duration < bestDuration {
 				bestRoute = route
 				bestDuration = duration
