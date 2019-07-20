@@ -7,6 +7,7 @@ import (
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
+// Calculator contains data for route calculation
 type Calculator struct {
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
@@ -16,6 +17,7 @@ type Calculator struct {
 	bestRoute          []Stop
 }
 
+// NewCalculator returns a new calculator object
 func NewCalculator(edgeData datacollection.Edges) (*Calculator, error) {
 	return &Calculator{timeFunctions: MakeCubicSplineFunctionForAllEdges(edgeData), bestTime: (time.Hour * 1000)}, nil
 }
