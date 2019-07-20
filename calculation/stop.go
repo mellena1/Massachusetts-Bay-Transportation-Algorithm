@@ -35,7 +35,7 @@ func canWalkToNextStop(route []Stop, nextStop Stop, timeFunctions CubicSplineFun
 		return true
 	}
 
-	stopBeforeLast := route[len(route)-1]
+	stopBeforeLast := route[len(route)-2]
 	if stopBeforeLast.WalkToNextStop { // walked to the last stop, can't walk again
 		return false
 	}
