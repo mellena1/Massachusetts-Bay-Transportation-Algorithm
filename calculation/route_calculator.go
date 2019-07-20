@@ -96,9 +96,9 @@ func cloneRouteSlice(route []Stop) []Stop {
 }
 
 func removeIndex(index int, list []Stop) []Stop {
-	newList := make([]Stop, 0)
-	newList = append(newList, list[:index]...)
-	newList = append(newList, list[index+1:]...)
+	newList := make([]Stop, len(list)-1)
+	copy(newList, list[:index])
+	copy(newList[index:], list[index+1:])
 	return newList
 }
 

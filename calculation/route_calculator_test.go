@@ -1,5 +1,9 @@
 package calculation
 
+import (
+	"testing"
+)
+
 // func Test_FindBestRoute(t *testing.T) {
 // 	stops := []string{"42.363021,-71.05829", "42.365577,-71.06129", "42.43668,-71.071097", "42.370772,-71.076536"}
 // 	loc, err := time.LoadLocation("America/New_York")
@@ -27,10 +31,51 @@ package calculation
 // 	t.FailNow()
 // }
 
-// func Test_removeIndex(t *testing.T) {
-// 	list := []string{"1", "2", "3", "4", "5"}
-// 	test := removeIndex(1, list)
-// 	fmt.Println(list)
-// 	fmt.Println(test)
-// 	t.FailNow()
-// }
+func Test_removeIndex(t *testing.T) {
+	list := []Stop{
+		Stop{
+			Name: "Andrew",
+		},
+		Stop{
+			Name: "Brad",
+		},
+		Stop{
+			Name: "Charles",
+		},
+		Stop{
+			Name: "Sam",
+		},
+	}
+
+	expectedList := []Stop{
+		Stop{
+			Name: "Andrew",
+		},
+		Stop{
+			Name: "Brad",
+		},
+		Stop{
+			Name: "Charles",
+		},
+		Stop{
+			Name: "Sam",
+		},
+	}
+
+	expectedNewList := []Stop{
+		Stop{
+			Name: "Andrew",
+		},
+		Stop{
+			Name: "Brad",
+		},
+		Stop{
+			Name: "Sam",
+		},
+	}
+
+	newList := removeIndex(2, list)
+
+	equals(t, expectedNewList, newList)
+	equals(t, expectedList, list)
+}
