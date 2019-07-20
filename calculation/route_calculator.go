@@ -23,13 +23,15 @@ func NewCalculator(edgeData datacollection.Edges) (*Calculator, error) {
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
-func (c *Calculator) FindBestRoute(stops []Stop, startTime time.Time) ([]Stop, time.Duration) {
+func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.Time) ([]Stop, time.Duration) {
+	convStops := dataCollectionStopToCalcStop(stops)
+
 	c.numberOfRoutes = 0
 	c.startTimeForRoutes = startTime
 
 	route := make([]Stop, 0)
 	c.startTime = time.Now()
-	return c.findBestRouteHelper(route, stops)
+	return c.findBestRouteHelper(route, convStops)
 }
 
 func printStops(stops []Stop) string {
