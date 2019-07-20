@@ -19,13 +19,13 @@ type EdgeTimes map[int64]time.Duration
 type Edges map[string]EdgeTimes
 
 // GetEdgeKey returns the map key for an edge between two stops
-func GetEdgeKey(stopA, stopB string) string {
-	return stopA + ":" + stopB
+func GetEdgeKey(stopAName, stopBName string) string {
+	return stopAName + ":" + stopBName
 }
 
 // GetEdgeKeyWalking returns the map key for an edge between two stops with walking
-func GetEdgeKeyWalking(stopA, stopB *Stop) string {
-	return stopA.Name + ":" + stopB.Name + "-Walking"
+func GetEdgeKeyWalking(stopAName, stopBName string) string {
+	return stopAName + ":" + stopBName + "-Walking"
 }
 
 // GetTransitDataFilename returns the filename that represents this data
@@ -66,7 +66,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 			if i != j {
 				if midStop, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok {
 					// Walking
-					edges[GetEdgeKeyWalking(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+					edges[GetEdgeKeyWalking(stopA.Name, stopB.Name)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
 
 					// Transit
 					aToMid := makeAPICall(stopA, midStop, interval, startTime, endTime, mapsClient)
