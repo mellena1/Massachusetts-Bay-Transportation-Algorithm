@@ -2,7 +2,6 @@ package calculation
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
@@ -89,8 +88,5 @@ func (c *Calculator) findRouteTime(route []datacollection.Stop) time.Duration {
 func (c *Calculator) findEdgeTime(stopA, stopB datacollection.Stop, startTime time.Time) time.Duration {
 	cubicSpline := c.timeFunctions[datacollection.GetEdgeKey(&stopA, &stopB)]
 	dur := GetDurationForEdgeFromCubicSpline(cubicSpline, startTime)
-	if dur.Hours() > 3 {
-		log.Printf("time: %s stopA: %s stopB: %s bad: %d", startTime.String(), stopA.Name, stopB.Name, int(dur.Hours()))
-	}
 	return dur
 }
