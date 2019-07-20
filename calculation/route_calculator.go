@@ -91,9 +91,7 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 
 func cloneRouteSlice(route []Stop) []Stop {
 	newRoute := make([]Stop, len(route))
-	for i, stop := range route {
-		newRoute[i] = stop
-	}
+	copy(newRoute, route)
 	return newRoute
 }
 
