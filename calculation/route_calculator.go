@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cnkei/gospline"
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
@@ -34,7 +35,7 @@ func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.T
 	return c.findBestRouteHelper(route, convStops)
 }
 
-func printStops(stops []Stop) string {
+func PrintStops(stops []Stop) string {
 	str := "["
 	for _, stop := range stops {
 		str += stop.Name + ","
@@ -53,7 +54,7 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 		if c.numberOfRoutes%1000000 == 0 {
 			elapsed := time.Since(c.startTime)
 			c.startTime = time.Now()
-			fmt.Printf("Routes Tested: %d\nBest Time: %v Route: %s\n", c.numberOfRoutes, c.bestTime, printStops(c.bestRoute))
+			fmt.Printf("Routes Tested: %d\nBest Time: %v Route: %s\n", c.numberOfRoutes, c.bestTime, PrintStops(c.bestRoute))
 			fmt.Printf("Time taken to calculate: %s\n\n", elapsed)
 		}
 		return curRoute, duration
@@ -70,7 +71,7 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 			bestDuration = duration
 		}
 		if canWalkToNextStop(route, stopsLeft[i], c.timeFunctions, len(stopsLeft) == 1) {
-			stopsLeft[i].WalkToNextStop = true
+			route[len(route)-1].WalkToNextStop = true
 			route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 			if duration < bestDuration {
 				bestRoute = route
@@ -98,7 +99,12 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 }
 
 func (c *Calculator) findEdgeTime(stopA, stopB Stop, startTime time.Time) time.Duration {
-	cubicSpline := c.timeFunctions[datacollection.GetEdgeKey(stopA.Name, stopB.Name)]
+	var cubicSpline gospline.Spline
+	if stopA.WalkToNextStop {
+		cubicSpline = c.timeFunctions[datacollection.GetEdgeKeyWalking(stopA.Name, stopB.Name)]
+	} else {
+		cubicSpline = c.timeFunctions[datacollection.GetEdgeKey(stopA.Name, stopB.Name)]
+	}
 	dur := GetDurationForEdgeFromCubicSpline(cubicSpline, startTime)
 	return dur
 }

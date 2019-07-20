@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"io/ioutil"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/calculation"
@@ -38,20 +39,44 @@ func main() {
 		log.Fatalf("failed reading in edge data: %s", err)
 	}
 
-	calc, err := calculation.NewCalculator(edgeData)
+	loc, _ := time.LoadLocation("America/New_York")
+	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
+	lastTime := time.Date(2019, time.July, 24, 19, 0, 0, 0, loc)
+	interval := time.Minute * 15
+
+	type result struct {
+		route    []calculation.Stop
+		duration time.Duration
+	}
+	results := make(map[time.Time]result)
+	routesLock := sync.Mutex{}
+
+	wg := sync.WaitGroup{}
+	for curTime := startTime; curTime.Before(lastTime) || curTime.Equal(lastTime); curTime = curTime.Add(interval) {
+		go func(t time.Time) {
+			wg.Add(1)
+			calc, err := calculation.NewCalculator(edgeData)
+			if err != nil {
+				log.Fatal(err)
+			}
+			route, duration := calc.FindBestRoute(endpoints, startTime)
+			routesLock.Lock()
+			defer routesLock.Unlock()
+			results[t] = result{route: route, duration: duration}
+			log.Printf("Done with: %v", t)
+			wg.Done()
+		}(curTime)
+	}
+	wg.Wait()
+
+	for t, res := range results {
+		log.Printf("%v --- Duration: %v Route: %s", t, res.duration, calculation.PrintStops(res.route))
+	}
+	data, err := json.Marshal(&results)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	loc, _ := time.LoadLocation("America/New_York")
-	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
-	route, duration := calc.FindBestRoute(endpoints, startTime)
-
-	fmt.Printf("Trip Duration: %v\n", duration)
-
-	for i, stop := range route {
-		fmt.Printf("%d: %s\n", i, stop.Name)
-	}
+	ioutil.WriteFile("results.json", data, 0644)
 }
 
 func readAPIKey(filename string) string {
