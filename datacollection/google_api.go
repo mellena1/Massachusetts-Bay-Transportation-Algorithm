@@ -19,8 +19,8 @@ type EdgeTimes map[int64]time.Duration
 type Edges map[string]EdgeTimes
 
 // GetEdgeKey returns the map key for an edge between two stops
-func GetEdgeKey(stopA, stopB *Stop) string {
-	return stopA.Name + ":" + stopB.Name
+func GetEdgeKey(stopA, stopB string) string {
+	return stopA + ":" + stopB
 }
 
 // GetEdgeKeyWalking returns the map key for an edge between two stops with walking
@@ -64,7 +64,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	for i, stopA := range stops {
 		for j, stopB := range stops {
 			if i != j {
-				if midStop, ok := specialEdges[GetEdgeKey(stopA, stopB)]; ok {
+				if midStop, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok {
 					// Walking
 					edges[GetEdgeKeyWalking(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
 
@@ -76,9 +76,9 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 					for k := range aToMid {
 						fullEdgeTime[k] = aToMid[k] + midToB[k]
 					}
-					edges[GetEdgeKey(stopA, stopB)] = fullEdgeTime
+					edges[GetEdgeKey(stopA.Name, stopB.Name)] = fullEdgeTime
 				} else {
-					edges[GetEdgeKey(stopA, stopB)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+					edges[GetEdgeKey(stopA.Name, stopB.Name)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
 				}
 			}
 		}
@@ -89,6 +89,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	ioutil.WriteFile(GetTransitDataFilename(startTime, interval), data, 0644)
 }
 
+// ImportEdgeData gets the edge data from a file
 func ImportEdgeData(filename string) (Edges, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
