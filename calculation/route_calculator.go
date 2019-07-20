@@ -38,7 +38,11 @@ func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.T
 func PrintStops(stops []Stop) string {
 	str := "["
 	for _, stop := range stops {
-		str += stop.Name + ","
+		if stop.WalkToNextStop {
+			str += stop.Name + "-walk,"
+		} else {
+			str += stop.Name + ","
+		}
 	}
 	return str[:len(str)-1] + "]"
 }
@@ -70,9 +74,10 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 			bestRoute = route
 			bestDuration = duration
 		}
-		if canWalkToNextStop(route, stopsLeft[i], c.timeFunctions, len(stopsLeft) == 1) {
-			route[len(route)-1].WalkToNextStop = true
-			route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
+		if canWalkToNextStop(curRoute, stopsLeft[i], c.timeFunctions, len(stopsLeft) == 1) {
+			newRoute := cloneRouteSlice(curRoute)
+			newRoute[len(newRoute)-1].WalkToNextStop = true
+			route, duration := c.findBestRouteHelper(append(newRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 			if duration < bestDuration {
 				bestRoute = route
 				bestDuration = duration
@@ -81,6 +86,14 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 	}
 
 	return bestRoute, bestDuration
+}
+
+func cloneRouteSlice(route []Stop) []Stop {
+	newRoute := make([]Stop, len(route))
+	for i, stop := range route {
+		newRoute[i] = stop
+	}
+	return newRoute
 }
 
 func removeIndex(index int, list []Stop) []Stop {

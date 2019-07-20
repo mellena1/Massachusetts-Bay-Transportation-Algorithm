@@ -53,7 +53,7 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	for curTime := startTime; curTime.Before(lastTime) || curTime.Equal(lastTime); curTime = curTime.Add(interval) {
-		go func(t time.Time) {
+		func(t time.Time) {
 			wg.Add(1)
 			calc, err := calculation.NewCalculator(edgeData)
 			if err != nil {

@@ -1,6 +1,8 @@
 package calculation
 
-import "github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
+import (
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
+)
 
 // Stop is used to calculate the best route of stops to take
 type Stop struct {
