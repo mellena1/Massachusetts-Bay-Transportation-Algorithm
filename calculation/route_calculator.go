@@ -67,6 +67,14 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 			bestRoute = route
 			bestDuration = duration
 		}
+		if canWalkToNextStop(route, stopsLeft[i], c.timeFunctions, len(stopsLeft) == 1) {
+			stopsLeft[i].WalkToNextStop = true
+			route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
+			if duration < bestDuration {
+				bestRoute = route
+				bestDuration = duration
+			}
+		}
 	}
 
 	return bestRoute, bestDuration
