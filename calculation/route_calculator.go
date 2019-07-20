@@ -69,6 +69,7 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
 	for i := range stopsLeft {
+		// newRoute := cloneRouteSlice(curRoute)
 		route, duration := c.findBestRouteHelper(append(curRoute, stopsLeft[i]), removeIndex(i, stopsLeft))
 		if duration < bestDuration {
 			bestRoute = route
