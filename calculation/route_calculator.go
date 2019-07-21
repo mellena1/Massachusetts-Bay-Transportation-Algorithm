@@ -12,7 +12,7 @@ import (
 type Calculator struct {
 	startTimeForRoutes time.Time                  // start all routes at this time
 	numberOfRoutes     int64                      // number of routes calculated so far
-	timeFunctions      CubicSplineFunctionsHolder // cubic splines
+	timeFunctions      cubicSplineFunctionsHolder // cubic splines
 	latestTime         time.Time                  // don't calculate routes past this time
 	timer              time.Time                  // timer to see how long each batch of routes takes
 	bestTime           time.Duration              // holds the current best time so it can print it out during iteration
@@ -21,7 +21,7 @@ type Calculator struct {
 
 // NewCalculator returns a new calculator object
 func NewCalculator(edgeData datacollection.Edges, latestTime time.Time) (*Calculator, error) {
-	return &Calculator{timeFunctions: MakeCubicSplineFunctionForAllEdges(edgeData), latestTime: latestTime, bestTime: (time.Hour * 1000)}, nil
+	return &Calculator{timeFunctions: makeCubicSplineFunctionForAllEdges(edgeData), latestTime: latestTime, bestTime: (time.Hour * 1000)}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
@@ -122,6 +122,6 @@ func (c *Calculator) findEdgeTime(stopA, stopB Stop, startTime time.Time) time.D
 	} else {
 		cubicSpline = c.timeFunctions[datacollection.GetEdgeKey(stopA.Name, stopB.Name)]
 	}
-	dur := GetDurationForEdgeFromCubicSpline(cubicSpline, startTime)
+	dur := getDurationForEdgeFromCubicSpline(cubicSpline, startTime)
 	return dur
 }

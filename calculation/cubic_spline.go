@@ -1,6 +1,7 @@
 package calculation
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sort"
@@ -15,68 +16,22 @@ import (
 	"gonum.org/v1/plot/vg"
 )
 
-type CubicSplineFunctionsHolder map[string]gospline.Spline
+// cubicSplineFunctionsHolder holds cubic splines given their edge
+type cubicSplineFunctionsHolder map[string]gospline.Spline
 
-// MakeCubicSplineFunctionForAllEdges returns a map of edges to CubicSpline time functions, key is the name of both stops seperated by a colon
-func MakeCubicSplineFunctionForAllEdges(edges datacollection.Edges) CubicSplineFunctionsHolder {
-	cubicSplineFunctions := make(CubicSplineFunctionsHolder)
+// makeCubicSplineFunctionForAllEdges returns a map of edges to CubicSpline time functions, key is the name of both stops seperated by a colon
+func makeCubicSplineFunctionForAllEdges(edges datacollection.Edges) cubicSplineFunctionsHolder {
+	cubicSplineFunctions := make(cubicSplineFunctionsHolder)
 
 	for edge, edgeTimings := range edges {
-		cubicSplineFunctions[edge] = MakeCubicSplineFunctionForEdge(edgeTimings)
+		cubicSplineFunctions[edge] = makeCubicSplineFunctionForEdge(edgeTimings)
 	}
 
 	return cubicSplineFunctions
 }
 
-func PlotCubicSplineFunc(cubicSplineFunc gospline.Spline, filename string) error {
-	p, err := plot.New()
-	if err != nil {
-		return err
-	}
-
-	loc, _ := time.LoadLocation("America/New_York")
-
-	pts := make(plotter.XYs, 100)
-	for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
-		var pt plotter.XY
-		pt.X = CubicSplineUnitFromTime(i)
-		dur := GetDurationForEdgeFromCubicSpline(cubicSplineFunc, i)
-		pt.Y = CubicSplineUnitFromDuration(dur)
-		pts = append(pts, pt)
-	}
-
-	plotutil.AddLinePoints(p, "CubicSpline", pts)
-	return p.Save(10*vg.Inch, 10*vg.Inch, filename)
-}
-
-func PlotAllCubicSplineFuncs(cubicSplineFuncs CubicSplineFunctionsHolder, filename string) error {
-	p, err := plot.New()
-	p.Title.Text = "All Route Times"
-
-	if err != nil {
-		return err
-	}
-	loc, _ := time.LoadLocation("America/New_York")
-
-	for k, v := range cubicSplineFuncs {
-		currentCubicSplineFunc := v
-		pts := make(plotter.XYs, 100)
-
-		for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
-			var pt plotter.XY
-			pt.X = CubicSplineUnitFromTime(i)
-			dur := GetDurationForEdgeFromCubicSpline(currentCubicSplineFunc, i)
-			pt.Y = CubicSplineUnitFromDuration(dur)
-			log.Printf("%f, %f", pt.X, pt.Y)
-			pts = append(pts, pt)
-		}
-		plotutil.AddLinePoints(p, k, pts)
-	}
-
-	return p.Save(24*vg.Inch, 24*vg.Inch, filename)
-}
-
-func MakeCubicSplineFunctionForEdge(edgeTiming datacollection.EdgeTimes) gospline.Spline {
+// makeCubicSplineFunctionForEdge takes in edge timing data and creates a cubic spline from it
+func makeCubicSplineFunctionForEdge(edgeTiming datacollection.EdgeTimes) gospline.Spline {
 	type xy struct {
 		x float64
 		y float64
@@ -87,8 +42,8 @@ func MakeCubicSplineFunctionForEdge(edgeTiming datacollection.EdgeTimes) gosplin
 		xTime := time.Unix(unixTime, 0)
 
 		newPoint := xy{
-			x: CubicSplineUnitFromTime(xTime),
-			y: CubicSplineUnitFromDuration(duration),
+			x: cubicSplineUnitFromTime(xTime),
+			y: cubicSplineUnitFromDuration(duration),
 		}
 		xyPoints = append(xyPoints, newPoint)
 	}
@@ -107,12 +62,65 @@ func MakeCubicSplineFunctionForEdge(edgeTiming datacollection.EdgeTimes) gosplin
 	return gospline.NewCubicSpline(x, y)
 }
 
-func GetDurationForEdgeFromCubicSpline(approxFunc gospline.Spline, startTime time.Time) time.Duration {
-	timeFloat := approxFunc.At(CubicSplineUnitFromTime(startTime))
+// PlotEdge makes a graph of one of the edges
+func PlotEdge(edges datacollection.Edges, edgeKey string, outputFile string) error {
+	splines := makeCubicSplineFunctionForAllEdges(edges)
+	cubicSplineFunc, ok := splines[edgeKey]
+	if !ok {
+		return errors.New("edge key does not exist")
+	}
+
+	p, _ := plot.New()
+	p.Title.Text = "Timings for edge " + edgeKey
+
+	loc, _ := time.LoadLocation("America/New_York")
+
+	pts := make(plotter.XYs, 100)
+	for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
+		var pt plotter.XY
+		pt.X = cubicSplineUnitFromTime(i)
+		dur := getDurationForEdgeFromCubicSpline(cubicSplineFunc, i)
+		pt.Y = cubicSplineUnitFromDuration(dur)
+		pts = append(pts, pt)
+	}
+
+	plotutil.AddLinePoints(p, "CubicSpline", pts)
+	return p.Save(10*vg.Inch, 10*vg.Inch, outputFile)
+}
+
+// PlotAllEdges makes a graph with all edges on it
+func PlotAllEdges(edges datacollection.Edges, filename string) error {
+	cubicSplineFuncs := makeCubicSplineFunctionForAllEdges(edges)
+
+	p, _ := plot.New()
+	p.Title.Text = "All Route Times"
+
+	loc, _ := time.LoadLocation("America/New_York")
+
+	for k, v := range cubicSplineFuncs {
+		currentCubicSplineFunc := v
+		pts := make(plotter.XYs, 100)
+
+		for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
+			var pt plotter.XY
+			pt.X = cubicSplineUnitFromTime(i)
+			dur := getDurationForEdgeFromCubicSpline(currentCubicSplineFunc, i)
+			pt.Y = cubicSplineUnitFromDuration(dur)
+			log.Printf("%f, %f", pt.X, pt.Y)
+			pts = append(pts, pt)
+		}
+		plotutil.AddLinePoints(p, k, pts)
+	}
+
+	return p.Save(24*vg.Inch, 24*vg.Inch, filename)
+}
+
+func getDurationForEdgeFromCubicSpline(approxFunc gospline.Spline, startTime time.Time) time.Duration {
+	timeFloat := approxFunc.At(cubicSplineUnitFromTime(startTime))
 	return durationFromCubicSplineUnit(timeFloat)
 }
 
-func CubicSplineUnitFromTime(t time.Time) float64 {
+func cubicSplineUnitFromTime(t time.Time) float64 {
 	hour := t.Hour()
 	if hour <= 4 {
 		hour += 24
@@ -120,7 +128,7 @@ func CubicSplineUnitFromTime(t time.Time) float64 {
 	return float64((hour * 60) + t.Minute())
 }
 
-func CubicSplineUnitFromDuration(t time.Duration) float64 {
+func cubicSplineUnitFromDuration(t time.Duration) float64 {
 	return t.Minutes()
 }
 
