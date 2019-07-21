@@ -36,6 +36,7 @@ func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.T
 	return c.findBestRouteHelper(route, convStops)
 }
 
+// PrintStops prints out an array of the stops in a route
 func PrintStops(stops []Stop) string {
 	str := "["
 	for _, stop := range stops {
