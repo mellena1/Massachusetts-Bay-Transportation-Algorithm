@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"runtime"
 	"sync"
 	"time"
 
@@ -42,7 +43,7 @@ func main() {
 	loc, _ := time.LoadLocation("America/New_York")
 	startTime := time.Date(2019, time.July, 24, 6, 0, 0, 0, loc)
 	lastTime := time.Date(2019, time.July, 24, 19, 0, 0, 0, loc)
-	interval := time.Minute * 15
+	interval := time.Hour
 
 	type result struct {
 		route    []calculation.Stop
@@ -51,21 +52,49 @@ func main() {
 	results := make(map[time.Time]result)
 	routesLock := sync.Mutex{}
 
+	numberOfRunners := struct {
+		num int
+		mu  sync.Mutex
+	}{}
+
+	numberOfCores := runtime.NumCPU()
+
 	wg := sync.WaitGroup{}
 	for curTime := startTime; curTime.Before(lastTime) || curTime.Equal(lastTime); curTime = curTime.Add(interval) {
-		func(t time.Time) {
+		numberOfRunners.mu.Lock()
+		numberOfRunners.num++
+		numberOfRunners.mu.Unlock()
+
+		go func(t time.Time) {
 			wg.Add(1)
-			calc, err := calculation.NewCalculator(edgeData)
+
+			calc, err := calculation.NewCalculator(edgeData, time.Date(2019, time.July, 25, 0, 0, 0, 0, loc))
 			if err != nil {
 				log.Fatal(err)
 			}
-			route, duration := calc.FindBestRoute(endpoints, startTime)
+			log.Printf("Starting: %v", t)
+			route, duration := calc.FindBestRoute(endpoints, t)
 			routesLock.Lock()
 			defer routesLock.Unlock()
 			results[t] = result{route: route, duration: duration}
 			log.Printf("Done with: %v", t)
+
 			wg.Done()
+			numberOfRunners.mu.Lock()
+			numberOfRunners.num--
+			numberOfRunners.mu.Unlock()
 		}(curTime)
+
+		for {
+			numberOfRunners.mu.Lock()
+			num := numberOfRunners.num
+			numberOfRunners.mu.Unlock()
+			if num == numberOfCores {
+				time.Sleep(time.Second)
+			} else {
+				break
+			}
+		}
 	}
 	wg.Wait()
 

@@ -13,14 +13,15 @@ type Calculator struct {
 	startTimeForRoutes time.Time
 	numberOfRoutes     int64
 	timeFunctions      CubicSplineFunctionsHolder
+	latestTime         time.Time
 	startTime          time.Time
 	bestTime           time.Duration
 	bestRoute          []Stop
 }
 
 // NewCalculator returns a new calculator object
-func NewCalculator(edgeData datacollection.Edges) (*Calculator, error) {
-	return &Calculator{timeFunctions: MakeCubicSplineFunctionForAllEdges(edgeData), bestTime: (time.Hour * 1000)}, nil
+func NewCalculator(edgeData datacollection.Edges, latestTime time.Time) (*Calculator, error) {
+	return &Calculator{timeFunctions: MakeCubicSplineFunctionForAllEdges(edgeData), latestTime: latestTime, bestTime: (time.Hour * 1000)}, nil
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
@@ -105,7 +106,11 @@ func removeIndex(index int, list []Stop) []Stop {
 func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 	var duration time.Duration
 	for i := 0; i < len(route)-1; i++ {
-		duration += c.findEdgeTime(route[i], route[i+1], c.startTimeForRoutes.Add(duration))
+		edgeStartTime := c.startTimeForRoutes.Add(duration)
+		if edgeStartTime.After(c.latestTime) {
+			return time.Hour * 1000
+		}
+		duration += c.findEdgeTime(route[i], route[i+1], edgeStartTime)
 	}
 	return duration
 }
