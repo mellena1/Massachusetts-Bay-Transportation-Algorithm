@@ -10,13 +10,13 @@ import (
 
 // Calculator contains data for route calculation
 type Calculator struct {
-	startTimeForRoutes time.Time
-	numberOfRoutes     int64
-	timeFunctions      CubicSplineFunctionsHolder
-	latestTime         time.Time
-	startTime          time.Time
-	bestTime           time.Duration
-	bestRoute          []Stop
+	startTimeForRoutes time.Time                  // start all routes at this time
+	numberOfRoutes     int64                      // number of routes calculated so far
+	timeFunctions      CubicSplineFunctionsHolder // cubic splines
+	latestTime         time.Time                  // don't calculate routes past this time
+	timer              time.Time                  // timer to see how long each batch of routes takes
+	bestTime           time.Duration              // holds the current best time so it can print it out during iteration
+	bestRoute          []Stop                     // holds the current best route so it can print it out during iteration
 }
 
 // NewCalculator returns a new calculator object
@@ -32,7 +32,7 @@ func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.T
 	c.startTimeForRoutes = startTime
 
 	route := make([]Stop, 0)
-	c.startTime = time.Now()
+	c.timer = time.Now()
 	return c.findBestRouteHelper(route, convStops)
 }
 
@@ -57,9 +57,9 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 			c.bestRoute = curRoute
 		}
 		if c.numberOfRoutes%1000000 == 0 {
-			elapsed := time.Since(c.startTime)
-			c.startTime = time.Now()
-			fmt.Printf("Routes Tested: %d\nBest Time: %v Route: %s\n", c.numberOfRoutes, c.bestTime, PrintStops(c.bestRoute))
+			elapsed := time.Since(c.timer)
+			c.timer = time.Now()
+			fmt.Printf("%s - Routes Tested: %d\nBest Time: %v Route: %s\n", c.startTimeForRoutes.Format(time.Kitchen), c.numberOfRoutes, c.bestTime, PrintStops(c.bestRoute))
 			fmt.Printf("Time taken to calculate: %s\n\n", elapsed)
 		}
 		return curRoute, duration

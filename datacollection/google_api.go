@@ -30,11 +30,11 @@ func GetEdgeKeyWalking(stopAName, stopBName string) string {
 
 // GetTransitDataFilename returns the filename that represents this data
 func GetTransitDataFilename(startTime time.Time, interval time.Duration) string {
-	return "datacollection/EdgeData StartTime:" + strconv.FormatInt(startTime.Unix(), 10) + " Interval:" + interval.String() + ".json"
+	return fmt.Sprintf("datacollection/EdgeData %s.json", startTime.Format("2006-01-02"))
 }
 
-func readAPIKey() string {
-	data, err := ioutil.ReadFile("apikey.secret")
+func readAPIKey(filename string) string {
+	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatalf("Can't read api key: %v", err)
 	}
@@ -42,7 +42,7 @@ func readAPIKey() string {
 }
 
 // GetTransitDataWithGoogleAPI generates a json file of distance data of edges
-func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Duration) {
+func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Duration, apiKeyFile string) {
 	stops, err := ImportStopsFromFile(StopLocations)
 	if err != nil {
 		log.Fatalf("Failed to import stop location data: %s", err)
@@ -53,7 +53,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 		log.Fatalf("Failed to import special edges data: %s", err)
 	}
 
-	apiKey := readAPIKey()
+	apiKey := readAPIKey(apiKeyFile)
 	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
 		log.Fatalf("Failed to initialize maps client: %s", err)
