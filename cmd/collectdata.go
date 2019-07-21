@@ -24,10 +24,17 @@ var collectDataCmd = &cobra.Command{
 	Use:   "collectdata",
 	Short: "Given a day, go collect data from google maps",
 	Long:  "Given a day, go collect data from google maps",
-	Run:   calculateFunc,
+	Run:   collectDataFunc,
 }
 
 func collectDataFunc(cmd *cobra.Command, args []string) {
+	if _, err := os.Stat(string(datacollection.SpecialEdgesFileWithLocationData)); err != nil {
+		datacollection.GetStopCoordinatesForGoogleAPI()
+	}
+	if _, err := os.Stat(string(datacollection.StopLocations)); err != nil {
+		datacollection.GetStopCoordinatesForGoogleAPI()
+	}
+
 	date, err := time.Parse("2006-01-02", collectDataDateString)
 	if err != nil {
 		fmt.Printf("invalid date: %s; error: %s", collectDataDateString, err)

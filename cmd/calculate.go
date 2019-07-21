@@ -92,6 +92,7 @@ func calculateFunc(cmd *cobra.Command, args []string) {
 			numberOfRunners.mu.Unlock()
 		}(curTime)
 
+		// only run numberOfCores amount of goroutines at once
 		for {
 			numberOfRunners.mu.Lock()
 			num := numberOfRunners.num
