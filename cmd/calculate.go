@@ -53,7 +53,7 @@ func calculateFunc(cmd *cobra.Command, args []string) {
 	latestRouteTime = latestRouteTime.Add(time.Hour * 24)
 
 	type Result struct {
-		Route    []calculation.Stop
+		Route    []datacollection.Stop
 		Duration time.Duration
 	}
 	results := make(map[time.Time]Result)
