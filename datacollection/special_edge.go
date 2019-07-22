@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-// SpecialEdges holds which edges need a stop in between them (and can also walk between them)
+// SpecialEdges holds which edges need a stop in between them (and can also walk between them). The key is the edge and the value is the middle stop.
 type SpecialEdges map[string]*Stop
 
 // SpecialEdgeFiles enum for files containing special edges

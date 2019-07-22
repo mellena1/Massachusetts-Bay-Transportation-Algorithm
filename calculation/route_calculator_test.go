@@ -2,47 +2,49 @@ package calculation
 
 import (
 	"testing"
+
+	"github.com/mellena1/Massachusetts-Bay-Transportation-Algorithm/datacollection"
 )
 
 func Test_removeIndex(t *testing.T) {
-	list := []Stop{
-		Stop{
+	list := []datacollection.Stop{
+		datacollection.Stop{
 			Name: "Andrew",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Brad",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Charles",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Sam",
 		},
 	}
 
-	expectedList := []Stop{
-		Stop{
+	expectedList := []datacollection.Stop{
+		datacollection.Stop{
 			Name: "Andrew",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Brad",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Charles",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Sam",
 		},
 	}
 
-	expectedNewList := []Stop{
-		Stop{
+	expectedNewList := []datacollection.Stop{
+		datacollection.Stop{
 			Name: "Andrew",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Brad",
 		},
-		Stop{
+		datacollection.Stop{
 			Name: "Sam",
 		},
 	}
