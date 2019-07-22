@@ -2,52 +2,42 @@
     "0000-01-01T06:00:00Z": {
         "Route": [
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             },
             {
                 "name": "Cleveland Circle",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Boston College",
-                "walk_to_next_stop": false
+                "name": "Boston College"
             },
             {
                 "name": "Heath Street",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Forest Hills",
-                "walk_to_next_stop": false
+                "name": "Forest Hills"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             }
         ],
         "Duration": 23400000000000
@@ -55,52 +45,42 @@
     "0000-01-01T07:00:00Z": {
         "Route": [
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 23100000000000
@@ -108,52 +88,42 @@
     "0000-01-01T08:00:00Z": {
         "Route": [
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
                 "name": "Heath Street",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Forest Hills",
-                "walk_to_next_stop": false
+                "name": "Forest Hills"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             }
         ],
         "Duration": 23160000000000
@@ -161,52 +131,42 @@
     "0000-01-01T09:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 22980000000000
@@ -214,52 +174,42 @@
     "0000-01-01T10:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 22800000000000
@@ -267,52 +217,42 @@
     "0000-01-01T11:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 23340000000000
@@ -320,52 +260,42 @@
     "0000-01-01T12:00:00Z": {
         "Route": [
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
                 "name": "Heath Street",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Forest Hills",
-                "walk_to_next_stop": false
+                "name": "Forest Hills"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             }
         ],
         "Duration": 23760000000000
@@ -373,52 +303,42 @@
     "0000-01-01T13:00:00Z": {
         "Route": [
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 24000000000000
@@ -426,52 +346,42 @@
     "0000-01-01T14:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 23640000000000
@@ -479,52 +389,42 @@
     "0000-01-01T15:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 22980000000000
@@ -532,52 +432,42 @@
     "0000-01-01T16:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 22260000000000
@@ -585,52 +475,42 @@
     "0000-01-01T17:00:00Z": {
         "Route": [
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
                 "name": "Heath Street",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Forest Hills",
-                "walk_to_next_stop": false
+                "name": "Forest Hills"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             }
         ],
         "Duration": 22380000000000
@@ -638,52 +518,42 @@
     "0000-01-01T18:00:00Z": {
         "Route": [
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Boston College",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Cleveland Circle",
-                "walk_to_next_stop": false
+                "name": "Cleveland Circle"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 21180000000000
@@ -691,52 +561,42 @@
     "0000-01-01T19:00:00Z": {
         "Route": [
             {
-                "name": "Wonderland",
-                "walk_to_next_stop": false
+                "name": "Wonderland"
             },
             {
-                "name": "Bowdoin",
-                "walk_to_next_stop": false
+                "name": "Bowdoin"
             },
             {
-                "name": "Lechmere",
-                "walk_to_next_stop": false
+                "name": "Lechmere"
             },
             {
-                "name": "Oak Grove",
-                "walk_to_next_stop": false
+                "name": "Oak Grove"
             },
             {
-                "name": "Alewife",
-                "walk_to_next_stop": false
+                "name": "Alewife"
             },
             {
-                "name": "Braintree",
-                "walk_to_next_stop": false
+                "name": "Braintree"
             },
             {
-                "name": "Mattapan",
-                "walk_to_next_stop": false
+                "name": "Mattapan"
             },
             {
                 "name": "Forest Hills",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Heath Street",
-                "walk_to_next_stop": false
+                "name": "Heath Street"
             },
             {
                 "name": "Cleveland Circle",
                 "walk_to_next_stop": true
             },
             {
-                "name": "Boston College",
-                "walk_to_next_stop": false
+                "name": "Boston College"
             },
             {
-                "name": "Riverside",
-                "walk_to_next_stop": false
+                "name": "Riverside"
             }
         ],
         "Duration": 21180000000000
