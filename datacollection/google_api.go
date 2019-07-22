@@ -66,11 +66,11 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 			if i != j {
 				if midStop, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok {
 					// Walking
-					edges[GetEdgeKeyWalking(stopA.Name, stopB.Name)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+					edges[GetEdgeKeyWalking(stopA.Name, stopB.Name)] = makeEdgeTimeAPICalls(stopA, stopB, interval, startTime, endTime, mapsClient)
 
 					// Transit
-					aToMid := makeAPICall(stopA, midStop, interval, startTime, endTime, mapsClient)
-					midToB := makeAPICall(midStop, stopB, interval, startTime, endTime, mapsClient)
+					aToMid := makeEdgeTimeAPICalls(stopA, midStop, interval, startTime, endTime, mapsClient)
+					midToB := makeEdgeTimeAPICalls(midStop, stopB, interval, startTime, endTime, mapsClient)
 
 					fullEdgeTime := make(EdgeTimes, len(aToMid))
 					for k := range aToMid {
@@ -78,7 +78,7 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 					}
 					edges[GetEdgeKey(stopA.Name, stopB.Name)] = fullEdgeTime
 				} else {
-					edges[GetEdgeKey(stopA.Name, stopB.Name)] = makeAPICall(stopA, stopB, interval, startTime, endTime, mapsClient)
+					edges[GetEdgeKey(stopA.Name, stopB.Name)] = makeEdgeTimeAPICalls(stopA, stopB, interval, startTime, endTime, mapsClient)
 				}
 			}
 		}
@@ -87,6 +87,42 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 
 	data, _ := json.Marshal(edges)
 	ioutil.WriteFile(GetTransitDataFilename(startTime, interval), data, 0644)
+}
+
+// TODO: Finish
+func ReconstructRoute(route []Stop, apiKeyFile string) {
+	stops, err := ImportStopsFromFile(StopLocations)
+	if err != nil {
+		log.Fatalf("Failed to import stop location data: %s", err)
+	}
+	stopMap := make(map[string]*Stop, len(stops))
+	for _, stop := range stops {
+		stopMap[stop.Name] = stop
+	}
+
+	specialEdges, err := ReadSpecialEdgesFromFile(SpecialEdgesFileWithLocationData)
+	if err != nil {
+		log.Fatalf("Failed to import special edges data: %s", err)
+	}
+
+	apiKey := readAPIKey(apiKeyFile)
+	mapsClient, err := maps.NewClient(maps.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatalf("Failed to initialize maps client: %s", err)
+	}
+
+	for i := 0; i < len(route)-1; i++ {
+		stopA := route[i]
+		stopB := route[i+1]
+
+		if stopA.WalkToNextStop {
+			midStop := specialEdges[GetEdgeKeyWalking(stopA.Name, stopB.Name)]
+			getDirectionBetweenEdgesAPICall(stopA, *midStop, mapsClient)
+			getDirectionBetweenEdgesAPICall(*midStop, stopB, mapsClient)
+		} else {
+			getDirectionBetweenEdgesAPICall(stopA, stopB, mapsClient)
+		}
+	}
 }
 
 // ImportEdgeData gets the edge data from a file
@@ -103,7 +139,12 @@ func ImportEdgeData(filename string) (Edges, error) {
 	return edges, nil
 }
 
-func makeAPICall(stopA, stopB *Stop, interval time.Duration, startTime, endTime time.Time, mapsClient *maps.Client) EdgeTimes {
+// TODO: Implement
+func getDirectionBetweenEdgesAPICall(stopA, stopB Stop, mapsClient *maps.Client) {
+
+}
+
+func makeEdgeTimeAPICalls(stopA, stopB *Stop, interval time.Duration, startTime, endTime time.Time, mapsClient *maps.Client) EdgeTimes {
 	edgeTimes := make(EdgeTimes)
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
 		unixTime := curTime.Unix()

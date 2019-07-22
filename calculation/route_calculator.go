@@ -16,7 +16,7 @@ type Calculator struct {
 	latestTime         time.Time                  // don't calculate routes past this time
 	timer              time.Time                  // timer to see how long each batch of routes takes
 	bestTime           time.Duration              // holds the current best time so it can print it out during iteration
-	bestRoute          []Stop                     // holds the current best route so it can print it out during iteration
+	bestRoute          []datacollection.Stop      // holds the current best route so it can print it out during iteration
 }
 
 // NewCalculator returns a new calculator object
@@ -25,19 +25,17 @@ func NewCalculator(edgeData datacollection.Edges, latestTime time.Time) (*Calcul
 }
 
 // FindBestRoute finds the fastest route to traverse every stop, every stop must have an edge to every other stop
-func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.Time) ([]Stop, time.Duration) {
-	convStops := dataCollectionStopToCalcStop(stops)
-
+func (c *Calculator) FindBestRoute(stops []datacollection.Stop, startTime time.Time) ([]datacollection.Stop, time.Duration) {
 	c.numberOfRoutes = 0
 	c.startTimeForRoutes = startTime
 
-	route := make([]Stop, 0)
+	route := make([]datacollection.Stop, 0)
 	c.timer = time.Now()
-	return c.findBestRouteHelper(route, convStops)
+	return c.findBestRouteHelper(route, stops)
 }
 
 // PrintStops prints out an array of the stops in a route
-func PrintStops(stops []Stop) string {
+func PrintStops(stops []datacollection.Stop) string {
 	str := "["
 	for _, stop := range stops {
 		if stop.WalkToNextStop {
@@ -49,7 +47,7 @@ func PrintStops(stops []Stop) string {
 	return str[:len(str)-1] + "]"
 }
 
-func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, time.Duration) {
+func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []datacollection.Stop) ([]datacollection.Stop, time.Duration) {
 	if len(stopsLeft) == 0 {
 		c.numberOfRoutes++
 		duration := c.findRouteTime(curRoute)
@@ -66,7 +64,7 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 		return curRoute, duration
 	}
 
-	var bestRoute []Stop
+	var bestRoute []datacollection.Stop
 	var bestDuration time.Duration
 	bestDuration = time.Duration(int64(^uint64(0) >> 1))
 
@@ -91,20 +89,20 @@ func (c *Calculator) findBestRouteHelper(curRoute, stopsLeft []Stop) ([]Stop, ti
 	return bestRoute, bestDuration
 }
 
-func cloneRouteSlice(route []Stop) []Stop {
-	newRoute := make([]Stop, len(route))
+func cloneRouteSlice(route []datacollection.Stop) []datacollection.Stop {
+	newRoute := make([]datacollection.Stop, len(route))
 	copy(newRoute, route)
 	return newRoute
 }
 
-func removeIndex(index int, list []Stop) []Stop {
-	newList := make([]Stop, len(list)-1)
+func removeIndex(index int, list []datacollection.Stop) []datacollection.Stop {
+	newList := make([]datacollection.Stop, len(list)-1)
 	copy(newList, list[:index])
 	copy(newList[index:], list[index+1:])
 	return newList
 }
 
-func (c *Calculator) findRouteTime(route []Stop) time.Duration {
+func (c *Calculator) findRouteTime(route []datacollection.Stop) time.Duration {
 	var duration time.Duration
 	for i := 0; i < len(route)-1; i++ {
 		edgeStartTime := c.startTimeForRoutes.Add(duration)
@@ -116,7 +114,7 @@ func (c *Calculator) findRouteTime(route []Stop) time.Duration {
 	return duration
 }
 
-func (c *Calculator) findEdgeTime(stopA, stopB Stop, startTime time.Time) time.Duration {
+func (c *Calculator) findEdgeTime(stopA, stopB datacollection.Stop, startTime time.Time) time.Duration {
 	var cubicSpline gospline.Spline
 	if stopA.WalkToNextStop {
 		cubicSpline = c.timeFunctions[datacollection.GetEdgeKeyWalking(stopA.Name, stopB.Name)]

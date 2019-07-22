@@ -21,6 +21,7 @@ const (
 type Stop struct {
 	Name                   string `json:"name"`
 	LongitudeCommaLatitude string `json:"longitude_comma_latitude,omitempty"`
+	WalkToNextStop         bool   `json:"walk_to_next_stop,omitempty"`
 }
 
 // NewStop returns a new stop struct
