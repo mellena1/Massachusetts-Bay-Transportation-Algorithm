@@ -12,10 +12,16 @@ import (
 var collectDataDateString string
 var collectDataAPIKeyFile string
 
+const (
+	collectDataStartTimeOfDay time.Duration = time.Hour * 6  // 6AM
+	collectDataEndTimeOfDay   time.Duration = time.Hour * 24 // midnight next day
+	collectDataInterval                     = time.Minute * 30
+)
+
 func init() {
 	collectDataCmd.Flags().StringVarP(&collectDataDateString, "date", "d", "", "Date to collect data for. Format: yyyy-mm-dd (required)")
 	collectDataCmd.MarkFlagRequired("date")
-	collectDataCmd.Flags().StringVarP(&collectDataAPIKeyFile, "apikey", "a", "apikey.secret", "The file containing the google maps api key")
+	collectDataCmd.PersistentFlags().StringVarP(&collectDataAPIKeyFile, "apikey", "a", "apikey.secret", "The file containing the google maps api key")
 
 	rootCmd.AddCommand(collectDataCmd)
 }
@@ -35,15 +41,14 @@ func collectDataFunc(cmd *cobra.Command, args []string) {
 		datacollection.GetStopCoordinatesForGoogleAPI()
 	}
 
-	date, err := time.Parse("2006-01-02", collectDataDateString)
+	date, err := time.Parse(datacollection.EdgeDataFileDateFormat, collectDataDateString)
 	if err != nil {
 		fmt.Printf("invalid date: %s; error: %s", collectDataDateString, err)
 		os.Exit(1)
 	}
 
-	startTime := date.Add(time.Hour * 6) // 6AM
-	endTime := date.Add(time.Hour * 24)  // midnight next day
-	interval := time.Minute * 30
+	startTime := date.Add(collectDataStartTimeOfDay)
+	endTime := date.Add(collectDataEndTimeOfDay)
 
-	datacollection.GetTransitDataWithGoogleAPI(startTime, endTime, interval, collectDataAPIKeyFile)
+	datacollection.GetTransitDataWithGoogleAPI(startTime, endTime, collectDataInterval, collectDataAPIKeyFile)
 }

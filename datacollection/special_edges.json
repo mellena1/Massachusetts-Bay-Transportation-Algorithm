@@ -1,70 +1,126 @@
 {
     "Boston College:Cleveland Circle": {
-        "name": "Kenmore"
+        "Stop": {
+            "Stop": {
+                "name": "Kenmore"
+            }
+        }
     },
     "Boston College:Riverside": {
-        "name": "Kenmore"
+        "Stop": {
+            "name": "Kenmore"
+        }
     },
     "Boston College:Heath Street": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Boston College:Forest Hills": {
-        "name": "Downtown Crossing"
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
     },
 
 
     "Cleveland Circle:Boston College": {
-        "name": "Kenmore"
+        "Stop": {
+            "name": "Kenmore"
+        }
     },
     "Cleveland Circle:Riverside": {
-        "name": "Kenmore"
+        "Stop": {
+            "name": "Kenmore"
+        }
     },
     "Cleveland Circle:Heath Street": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Cleveland Circle:Forest Hills": {
-        "name": "Downtown Crossing"
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
     },
 
 
     "Riverside:Boston College": {
-        "name": "Kenmore"
+        "Stop": {
+            "name": "Kenmore"
+        }
     },
     "Riverside:Cleveland Circle": {
-        "name": "Kenmore"
+        "Stop": {
+            "name": "Kenmore"
+        }
     },
     "Riverside:Heath Street": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Riverside:Forest Hills": {
-        "name": "Downtown Crossing"
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
     },
 
 
     "Heath Street:Boston College": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Heath Street:Cleveland Circle": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Heath Street:Riverside": {
-        "name": "Copley"
+        "Stop": {
+            "name": "Copley"
+        }
     },
     "Heath Street:Forest Hills": {
-        "name": "Downtown Crossing"
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
     },
 
 
     "Forest Hills:Boston College": {
-        "name": "Park Street"
+        "Stop": {
+            "name": "Park Street"
+        }
     },
     "Forest Hills:Cleveland Circle": {
-        "name": "Park Street"
+        "Stop": {
+            "name": "Park Street"
+        }
     },
     "Forest Hills:Riverside": {
-        "name": "Park Street"
+        "Stop": {
+            "name": "Park Street"
+        }
     },
     "Forest Hills:Heath Street": {
-        "name": "Park Street"
+        "Stop": {
+            "name": "Park Street"
+        }
+    },
+    "Forest Hills:Mattapan": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        },
+        "no_walking": true
+    },
+
+
+    "Mattapan:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        },
+        "no_walking": true
     }
 }

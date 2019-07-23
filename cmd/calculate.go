@@ -44,19 +44,19 @@ func calculateFunc(cmd *cobra.Command, args []string) {
 		log.Fatalf("failed reading in edge data: %s", err)
 	}
 
-	firstRouteStartTime, _ := time.Parse(time.Kitchen, "6:00AM")
-	lastRouteStartTime, _ := time.Parse(time.Kitchen, "7:00PM")
+	parsedDate, err := datacollection.GetDateFromEdgeDataFilename(calculateInputFile)
+	if err != nil {
+		log.Fatalf("invalid date in edgedata file. Please use format yyyy-mm-dd. %s", err)
+	}
+
+	firstRouteStartTime := parsedDate.Add(time.Hour * 6) // 6AM
+	lastRouteStartTime := parsedDate.Add(time.Hour * 19) // 7PM
 	interval := time.Hour
 
 	// Cubic spline data ends at midnight, don't try calculating after that
-	latestRouteTime, _ := time.Parse(time.Kitchen, "12:00AM")
-	latestRouteTime = latestRouteTime.Add(time.Hour * 24)
+	latestRouteTime := parsedDate.Add(time.Hour * 24) // 12AM next day
 
-	type Result struct {
-		Route    []datacollection.Stop
-		Duration time.Duration
-	}
-	results := make(map[time.Time]Result)
+	results := make(Results)
 	routesLock := sync.Mutex{}
 
 	numberOfRunners := struct {
