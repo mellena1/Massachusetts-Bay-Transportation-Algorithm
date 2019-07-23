@@ -16,8 +16,20 @@ import (
 
 const (
 	// EdgeDataFileDateFormat time format for the date to save to the EdgeData json files
-	EdgeDataFileDateFormat string = "2006-01-02"
+	EdgeDataFileDateFormat string        = "2006-01-02"
+	MaxDuration            time.Duration = time.Hour * 1000
 )
+
+var allowedTransitLines map[string]bool = map[string]bool{
+	"Blue Line":    true,
+	"Red Line":     true,
+	"Orange Line":  true,
+	"Green Line":   true,
+	"Green Line B": true,
+	"Green Line C": true,
+	"Green Line D": true,
+	"Green Line E": true,
+}
 
 // EdgeDataTimeLocation location that dates and times should be in
 var EdgeDataTimeLocation, _ = time.LoadLocation("America/New_York")
@@ -268,17 +280,25 @@ func getDirectionBetweenEdgesAPICall(stopA, stopB *Stop, departTime time.Time, m
 func makeEdgeTimeAPICalls(stopA, stopB *Stop, interval time.Duration, startTime, endTime time.Time, mapsClient *maps.Client) EdgeTimes {
 	edgeTimes := make(EdgeTimes)
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
-		edgeTimes[curTime.Unix()] = findEdgeTime(stopA, stopB, curTime, mapsClient)
+		edgeTime := findEdgeTime(stopA, stopB, curTime, mapsClient)
+		if edgeTime == MaxDuration {
+			if !curTime.Equal(startTime) {
+				edgeTime = edgeTimes[curTime.Add(-interval).Unix()]
+			}
+			// if startTime, just put in the MaxDuration time... might not be any trains running in the morning or something
+		}
+		edgeTimes[curTime.Unix()] = edgeTime
 	}
 	return edgeTimes
 }
 
 func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Client) time.Duration {
-	req := &maps.DistanceMatrixRequest{
-		Origins:       []string{stopA.LongitudeCommaLatitude},
-		Destinations:  []string{stopB.LongitudeCommaLatitude},
+	req := &maps.DirectionsRequest{
+		Origin:        stopA.LongitudeCommaLatitude,
+		Destination:   stopB.LongitudeCommaLatitude,
 		DepartureTime: strconv.FormatInt(startTime.Unix(), 10),
 		Mode:          maps.TravelModeTransit,
+		Alternatives:  true,
 		TransitMode: []maps.TransitMode{
 			maps.TransitModeSubway,
 			maps.TransitModeTram,
@@ -286,7 +306,7 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 		},
 	}
 
-	var resp *maps.DistanceMatrixResponse
+	var routes []maps.Route
 	count := 0
 	for {
 		if count > 5 {
@@ -294,13 +314,9 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 		}
 
 		var err error
-		resp, err = mapsClient.DistanceMatrix(context.Background(), req)
+		routes, _, err = mapsClient.Directions(context.Background(), req)
 		if err != nil {
-			log.Fatalf("fatal error: %s", err)
-		}
-
-		if resp.Rows[0].Elements[0].Status != "OK" {
-			fmt.Printf("Elements Status: %v\n\n", resp.Rows[0].Elements[0].Status)
+			log.Printf("directions api error: %s", err)
 			count++
 			continue
 		}
@@ -308,11 +324,23 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 		break
 	}
 
-	duration := resp.Rows[0].Elements[0].Duration
-	durationInTraffic := resp.Rows[0].Elements[0].DurationInTraffic
-	if durationInTraffic > duration {
-		duration = durationInTraffic
+	bestDur := MaxDuration
+	for _, route := range routes {
+		var routeDur time.Duration
+		leg := route.Legs[0] // transit will always only have one leg
+
+		routeDur = leg.ArrivalTime.Sub(startTime)
+		for _, step := range leg.Steps {
+			if step.TransitDetails != nil && !allowedTransitLines[step.TransitDetails.Line.Name] {
+				// must be bus or something like that
+				routeDur = MaxDuration
+				break
+			}
+		}
+		if routeDur < bestDur {
+			bestDur = routeDur
+		}
 	}
 
-	return duration
+	return bestDur
 }

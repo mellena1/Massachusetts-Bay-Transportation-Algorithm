@@ -107,7 +107,7 @@ func (c *Calculator) findRouteTime(route []datacollection.Stop) time.Duration {
 	for i := 0; i < len(route)-1; i++ {
 		edgeStartTime := c.startTimeForRoutes.Add(duration)
 		if edgeStartTime.After(c.latestTime) {
-			return time.Hour * 1000
+			return datacollection.MaxDuration
 		}
 		duration += c.findEdgeTime(route[i], route[i+1], edgeStartTime)
 	}
