@@ -15,8 +15,12 @@ import (
 )
 
 const (
+	// EdgeDataFileDateFormat time format for the date to save to the EdgeData json files
 	EdgeDataFileDateFormat string = "2006-01-02"
 )
+
+// EdgeDataTimeLocation location that dates and times should be in
+var EdgeDataTimeLocation, _ = time.LoadLocation("America/New_York")
 
 // EdgeTimes stores the time each edge took to traverse (unix time -> duration for that time)
 type EdgeTimes map[int64]time.Duration
@@ -34,11 +38,17 @@ func GetEdgeKeyWalking(stopAName, stopBName string) string {
 	return stopAName + ":" + stopBName + "-Walking"
 }
 
+// GetDateFromEdgeDataFilename return the date from the filename of a EdgeData file
 func GetDateFromEdgeDataFilename(filename string) (time.Time, error) {
 	baseFilename := filepath.Base(filename)
 	baseFilename = strings.Replace(baseFilename, ".json", "", -1)
 	date := strings.Split(baseFilename, " ")[1]
-	return time.Parse(EdgeDataFileDateFormat, date)
+	t, err := time.Parse(EdgeDataFileDateFormat, date)
+	if err != nil {
+		return time.Time{}, err
+	}
+	// midnight in EST
+	return t.In(EdgeDataTimeLocation).Add(time.Hour * 4), nil
 }
 
 // GetTransitDataFilename returns the filename that represents this data
@@ -79,11 +89,14 @@ func GetTransitDataForAnEdgeWithGoogleAPI(stopA, stopB *Stop, startTime, endTime
 func getTransitDataForAnEdgeWithClient(stopA, stopB *Stop, startTime, endTime time.Time, interval time.Duration, mapsClient *maps.Client, specialEdges SpecialEdges) Edges {
 	edges := make(Edges)
 
-	if midStop, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok {
+	if specialEdge, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok {
 		// Walking
-		edges[GetEdgeKeyWalking(stopA.Name, stopB.Name)] = makeEdgeTimeAPICalls(stopA, stopB, interval, startTime, endTime, mapsClient)
+		if !specialEdge.NoWalking {
+			edges[GetEdgeKeyWalking(stopA.Name, stopB.Name)] = makeEdgeTimeAPICalls(stopA, stopB, interval, startTime, endTime, mapsClient)
+		}
 
 		// Transit
+		midStop := specialEdge.Stop
 		aToMid := makeEdgeTimeAPICalls(stopA, midStop, interval, startTime, endTime, mapsClient)
 		midToB := makeEdgeTimeAPICalls(midStop, stopB, interval, startTime, endTime, mapsClient)
 
@@ -182,7 +195,9 @@ func ReconstructRoute(route []Stop, startTime time.Time, apiKeyFile string) {
 		stopA := stopMap[route[i].Name]
 		stopB := stopMap[route[i+1].Name]
 
-		if midStop, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok && !route[i].WalkToNextStop {
+		if specialEdge, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok && !route[i].WalkToNextStop {
+			midStop := specialEdge.Stop
+
 			routeAToMid := getDirectionBetweenEdgesAPICall(stopA, midStop, timeToGo, mapsClient)[0]
 			timeToGo = routeAToMid.Legs[0].ArrivalTime
 			routeMidToB := getDirectionBetweenEdgesAPICall(midStop, stopB, timeToGo, mapsClient)[0]
@@ -267,6 +282,7 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 		TransitMode: []maps.TransitMode{
 			maps.TransitModeSubway,
 			maps.TransitModeTram,
+			maps.TransitModeRail,
 		},
 	}
 

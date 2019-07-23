@@ -43,7 +43,8 @@ func GetStopCoordinatesForGoogleAPI() {
 			endpointStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
 			continue
 		}
-		for _, middleStop := range specialEdges {
+		for _, specialEdge := range specialEdges {
+			middleStop := specialEdge.Stop
 			if stop.Name == middleStop.Name {
 				middleStop.SetLongitudeCommaLatitude(stop.Longitude, stop.Latitude)
 			}

@@ -15,7 +15,7 @@ var collectDataAPIKeyFile string
 const (
 	collectDataStartTimeOfDay time.Duration = time.Hour * 6  // 6AM
 	collectDataEndTimeOfDay   time.Duration = time.Hour * 24 // midnight next day
-	collectDataInterval                     = time.Minute * 30
+	collectDataInterval       time.Duration = time.Minute * 30
 )
 
 func init() {
@@ -42,6 +42,7 @@ func collectDataFunc(cmd *cobra.Command, args []string) {
 	}
 
 	date, err := time.Parse(datacollection.EdgeDataFileDateFormat, collectDataDateString)
+	date.Add(time.Hour * 4) // midnight EST
 	if err != nil {
 		fmt.Printf("invalid date: %s; error: %s", collectDataDateString, err)
 		os.Exit(1)

@@ -5,8 +5,14 @@ import (
 	"io/ioutil"
 )
 
-// SpecialEdges holds which edges need a stop in between them (and can also walk between them). The key is the edge and the value is the middle stop.
-type SpecialEdges map[string]*Stop
+// SpecialEdge holds data about a special edge, including its midstop and if a walking edge is allowed
+type SpecialEdge struct {
+	Stop      *Stop `json:"Stop"`
+	NoWalking bool  `json:"no_walking,omitempty"`
+}
+
+// SpecialEdges holds which edges need a stop in between them (and can also possibly walk between them)
+type SpecialEdges map[string]SpecialEdge
 
 // SpecialEdgeFiles enum for files containing special edges
 type SpecialEdgeFiles string

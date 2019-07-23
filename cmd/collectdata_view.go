@@ -50,7 +50,7 @@ func collectDataViewFunc(cmd *cobra.Command, args []string) {
 			os.Exit(1)
 		}
 		if timings, ok := edgeData[datacollection.GetEdgeKeyWalking(collectDataViewStopAName, collectDataViewStopBName)]; ok {
-			fmt.Printf("--- Walking ---")
+			fmt.Println("--- Walking ---")
 			printEdgeTimings(timings)
 		}
 	} else {

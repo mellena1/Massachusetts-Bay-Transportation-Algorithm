@@ -87,6 +87,12 @@
             "name": "Downtown Crossing"
         }
     },
+    "Heath Street:Mattapan": {
+        "Stop": {
+            "name": "Park Street"
+        },
+        "no_walking": true
+    },
 
 
     "Forest Hills:Boston College": {
@@ -117,6 +123,12 @@
     },
 
 
+    "Mattapan:Heath Street": {
+        "Stop": {
+            "name": "Park Street"
+        },
+        "no_walking": true
+    },
     "Mattapan:Forest Hills": {
         "Stop": {
             "name": "Downtown Crossing"
