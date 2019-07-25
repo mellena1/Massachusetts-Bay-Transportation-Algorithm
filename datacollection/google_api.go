@@ -20,15 +20,16 @@ const (
 	MaxDuration            time.Duration = time.Hour * 1000
 )
 
-var allowedTransitLines map[string]bool = map[string]bool{
-	"Blue Line":    true,
-	"Red Line":     true,
-	"Orange Line":  true,
-	"Green Line":   true,
-	"Green Line B": true,
-	"Green Line C": true,
-	"Green Line D": true,
-	"Green Line E": true,
+var allowedTransitLines = map[string]bool{
+	"Blue Line":        true,
+	"Red Line":         true,
+	"Orange Line":      true,
+	"Green Line":       true,
+	"Green Line B":     true,
+	"Green Line C":     true,
+	"Green Line D":     true,
+	"Green Line E":     true,
+	"Mattapan Trolley": true,
 }
 
 // EdgeDataTimeLocation location that dates and times should be in
@@ -55,11 +56,17 @@ func GetDateFromEdgeDataFilename(filename string) (time.Time, error) {
 	baseFilename := filepath.Base(filename)
 	baseFilename = strings.Replace(baseFilename, ".json", "", -1)
 	date := strings.Split(baseFilename, " ")[1]
+
+	// midnight in EST
+	return ParseDateToEST(date)
+}
+
+// ParseDateToEST takes in a string of format EdgeDataTimeLocation and returns a time.Time variable in EST
+func ParseDateToEST(date string) (time.Time, error) {
 	t, err := time.Parse(EdgeDataFileDateFormat, date)
 	if err != nil {
 		return time.Time{}, err
 	}
-	// midnight in EST
 	return t.In(EdgeDataTimeLocation).Add(time.Hour * 4), nil
 }
 

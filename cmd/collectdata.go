@@ -41,8 +41,7 @@ func collectDataFunc(cmd *cobra.Command, args []string) {
 		datacollection.GetStopCoordinatesForGoogleAPI()
 	}
 
-	date, err := time.Parse(datacollection.EdgeDataFileDateFormat, collectDataDateString)
-	date.Add(time.Hour * 4) // midnight EST
+	date, err := datacollection.ParseDateToEST(collectDataDateString)
 	if err != nil {
 		fmt.Printf("invalid date: %s; error: %s", collectDataDateString, err)
 		os.Exit(1)
