@@ -211,28 +211,27 @@ func ReconstructRoute(route []Stop, startTime time.Time, apiKeyFile string) {
 
 	timeToGo := startTime
 	for i := 0; i < len(route)-1; i++ {
+		fmt.Printf("Departure time: %s\n", timeToGo.Format(time.Kitchen))
+
 		stopA := stopMap[route[i].Name]
 		stopB := stopMap[route[i+1].Name]
 
 		if specialEdge, ok := specialEdges[GetEdgeKey(stopA.Name, stopB.Name)]; ok && !route[i].WalkToNextStop {
 			midStop := specialEdge.Stop
 
-			routeAToMid := getDirectionBetweenEdgesAPICall(stopA, midStop, timeToGo, mapsClient)[0]
-			timeToGo = routeAToMid.Legs[0].ArrivalTime
-			routeMidToB := getDirectionBetweenEdgesAPICall(midStop, stopB, timeToGo, mapsClient)[0]
-			timeToGo = routeMidToB.Legs[0].ArrivalTime
+			dur, routeAToMid := findEdgeTime(stopA, midStop, timeToGo, mapsClient)
+			timeToGo = timeToGo.Add(dur)
+			dur, routeMidToB := findEdgeTime(midStop, stopB, timeToGo, mapsClient)
+			timeToGo = timeToGo.Add(dur)
 			printRoute(stopA, midStop, routeAToMid)
 			printRoute(midStop, stopB, routeMidToB)
 		} else {
-			routesAToB := getDirectionBetweenEdgesAPICall(stopA, stopB, timeToGo, mapsClient)
-			timeToGo = routesAToB[0].Legs[0].ArrivalTime
-			printRoute(stopA, stopB, routesAToB[0])
-			if stopA.Name == "Forest Hills" {
-				fmt.Printf("\n\n\n%f\n\n\n%d\n", findEdgeTime(stopA, stopB, timeToGo, mapsClient).Minutes(), len(routesAToB))
-			}
+			dur, routeAToB := findEdgeTime(stopA, stopB, timeToGo, mapsClient)
+			timeToGo = timeToGo.Add(dur)
+			printRoute(stopA, stopB, routeAToB)
 		}
 
-		fmt.Println(timeToGo)
+		fmt.Printf("Arrival time: %s\n\n", timeToGo.Format(time.Kitchen))
 	}
 }
 
@@ -250,44 +249,10 @@ func ImportEdgeData(filename string) (Edges, error) {
 	return edges, nil
 }
 
-// TODO: Implement
-func getDirectionBetweenEdgesAPICall(stopA, stopB *Stop, departTime time.Time, mapsClient *maps.Client) []maps.Route {
-	req := &maps.DirectionsRequest{
-		Origin:        stopA.LongitudeCommaLatitude,
-		Destination:   stopB.LongitudeCommaLatitude,
-		DepartureTime: strconv.FormatInt(departTime.Unix(), 10),
-		Mode:          maps.TravelModeTransit,
-		TransitMode: []maps.TransitMode{
-			maps.TransitModeSubway,
-			maps.TransitModeTram,
-		},
-	}
-
-	var routes []maps.Route
-	count := 0
-	for {
-		if count > 5 {
-			log.Fatalf("More than 5 retries on query.")
-		}
-
-		var err error
-		routes, _, err = mapsClient.Directions(context.Background(), req)
-		if err != nil {
-			log.Printf("directions api error: %s", err)
-			count++
-			continue
-		}
-
-		break
-	}
-
-	return routes
-}
-
 func makeEdgeTimeAPICalls(stopA, stopB *Stop, interval time.Duration, startTime, endTime time.Time, mapsClient *maps.Client) EdgeTimes {
 	edgeTimes := make(EdgeTimes)
 	for curTime := startTime; curTime.Before(endTime) || curTime.Equal(endTime); curTime = curTime.Add(interval) {
-		edgeTime := findEdgeTime(stopA, stopB, curTime, mapsClient)
+		edgeTime, _ := findEdgeTime(stopA, stopB, curTime, mapsClient)
 		if edgeTime == MaxDuration {
 			if !curTime.Equal(startTime) {
 				edgeTime = edgeTimes[curTime.Add(-interval).Unix()]
@@ -299,7 +264,7 @@ func makeEdgeTimeAPICalls(stopA, stopB *Stop, interval time.Duration, startTime,
 	return edgeTimes
 }
 
-func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Client) time.Duration {
+func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Client) (time.Duration, maps.Route) {
 	req := &maps.DirectionsRequest{
 		Origin:        stopA.LongitudeCommaLatitude,
 		Destination:   stopB.LongitudeCommaLatitude,
@@ -331,6 +296,7 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 		break
 	}
 
+	var bestRoute maps.Route
 	bestDur := MaxDuration
 	for _, route := range routes {
 		var routeDur time.Duration
@@ -345,9 +311,10 @@ func findEdgeTime(stopA, stopB *Stop, startTime time.Time, mapsClient *maps.Clie
 			}
 		}
 		if routeDur < bestDur {
+			bestRoute = route
 			bestDur = routeDur
 		}
 	}
 
-	return bestDur
+	return bestDur, bestRoute
 }

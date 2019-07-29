@@ -18,8 +18,8 @@ var reconstructDataFile string
 var reconstructAPIKeyFile string
 
 func init() {
-	reconstructCmd.Flags().StringVarP(&reconstructDataFile, "datafile", "f", "", "File to get data from (required)")
-	reconstructCmd.MarkFlagRequired("datafile")
+	reconstructCmd.Flags().StringVarP(&reconstructDataFile, "input", "i", "", "File to get data from (required)")
+	reconstructCmd.MarkFlagRequired("input")
 	reconstructCmd.Flags().StringVarP(&reconstructAPIKeyFile, "apikey", "a", "apikey.secret", "The file containing the google maps api key")
 
 	rootCmd.AddCommand(reconstructCmd)
