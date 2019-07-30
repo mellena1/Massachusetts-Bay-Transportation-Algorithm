@@ -74,8 +74,8 @@ func PlotEdge(edges datacollection.Edges, edgeKey string, outputFile string) err
 
 	loc, _ := time.LoadLocation("America/New_York")
 
-	pts := make(plotter.XYs, 100)
-	for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
+	var pts plotter.XYs
+	for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 10) {
 		var pt plotter.XY
 		pt.X = cubicSplineUnitFromTime(i)
 		dur := getDurationForEdgeFromCubicSpline(cubicSplineFunc, i)
@@ -98,9 +98,9 @@ func PlotAllEdges(edges datacollection.Edges, filename string) error {
 
 	for k, v := range cubicSplineFuncs {
 		currentCubicSplineFunc := v
-		pts := make(plotter.XYs, 100)
+		var pts plotter.XYs
 
-		for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 5) {
+		for i := time.Date(2019, time.July, 18, 6, 0, 0, 0, loc); i.Before(time.Date(2019, time.July, 19, 0, 0, 0, 0, loc)); i = i.Add(time.Minute * 10) {
 			var pt plotter.XY
 			pt.X = cubicSplineUnitFromTime(i)
 			dur := getDurationForEdgeFromCubicSpline(currentCubicSplineFunc, i)
