@@ -16,10 +16,10 @@ var plotStopA string
 var plotStopB string
 
 func init() {
-	plotCmd.Flags().StringVarP(&plotInputFile, "input", "i", "", "File read the edge data from")
+	plotCmd.Flags().StringVarP(&plotInputFile, "input", "i", "", "File read the edge data from (required)")
 	plotCmd.MarkFlagRequired("input")
 
-	plotCmd.Flags().StringVarP(&plotOutputFile, "output", "o", "", "File to save the plot to")
+	plotCmd.Flags().StringVarP(&plotOutputFile, "output", "o", "", "File to save the plot to (required)")
 	plotCmd.MarkFlagRequired("output")
 
 	plotCmd.Flags().StringVar(&plotStopA, "stopA", "", "First stop of the edge to plot")

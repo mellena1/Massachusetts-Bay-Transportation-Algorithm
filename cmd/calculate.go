@@ -18,7 +18,7 @@ var calculateInputFile string
 var calculateOutputFile string
 
 func init() {
-	calculateCmd.Flags().StringVarP(&calculateInputFile, "input", "i", "", "File read the edge data from")
+	calculateCmd.Flags().StringVarP(&calculateInputFile, "input", "i", "", "File read the edge data from (required)")
 	calculateCmd.MarkFlagRequired("input")
 
 	calculateCmd.Flags().StringVarP(&calculateOutputFile, "output", "o", "results.json", "File to save the results to")

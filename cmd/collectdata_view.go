@@ -17,8 +17,8 @@ var collectDataViewStopBName string
 func init() {
 	collectDataViewCmd.Flags().StringVarP(&collectDataViewInputFile, "input", "i", "", "File to update (required)")
 	collectDataViewCmd.MarkFlagRequired("input")
-	collectDataViewCmd.Flags().StringVar(&collectDataViewStopAName, "stopA", "", "Beginning stop of edge (required)")
-	collectDataViewCmd.Flags().StringVar(&collectDataViewStopBName, "stopB", "", "Ending stop of edge (required)")
+	collectDataViewCmd.Flags().StringVar(&collectDataViewStopAName, "stopA", "", "Beginning stop of edge")
+	collectDataViewCmd.Flags().StringVar(&collectDataViewStopBName, "stopB", "", "Ending stop of edge")
 
 	collectDataCmd.AddCommand(collectDataViewCmd)
 }
