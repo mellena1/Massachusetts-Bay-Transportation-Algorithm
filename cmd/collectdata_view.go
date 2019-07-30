@@ -43,6 +43,9 @@ func collectDataViewFunc(cmd *cobra.Command, args []string) {
 	}
 
 	if collectDataViewStopAName != "" && collectDataViewStopBName != "" {
+		collectDataViewStopAName = makeStopNameValid(collectDataViewStopAName)
+		collectDataViewStopBName = makeStopNameValid(collectDataViewStopBName)
+
 		if timings, ok := edgeData[datacollection.GetEdgeKey(collectDataViewStopAName, collectDataViewStopBName)]; ok {
 			printEdgeTimings(timings)
 		} else {

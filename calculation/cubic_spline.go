@@ -3,7 +3,6 @@ package calculation
 import (
 	"errors"
 	"fmt"
-	"log"
 	"sort"
 	"time"
 
@@ -106,7 +105,6 @@ func PlotAllEdges(edges datacollection.Edges, filename string) error {
 			pt.X = cubicSplineUnitFromTime(i)
 			dur := getDurationForEdgeFromCubicSpline(currentCubicSplineFunc, i)
 			pt.Y = cubicSplineUnitFromDuration(dur)
-			log.Printf("%f, %f", pt.X, pt.Y)
 			pts = append(pts, pt)
 		}
 		plotutil.AddLinePoints(p, k, pts)

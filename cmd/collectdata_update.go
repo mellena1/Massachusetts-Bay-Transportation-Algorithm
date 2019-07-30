@@ -45,6 +45,10 @@ func collectDataUpdateFunc(cmd *cobra.Command, args []string) {
 		fmt.Printf("Failed to import stop location data: %s", err)
 		os.Exit(1)
 	}
+
+	collectDataUpdateStopAName = makeStopNameValid(collectDataUpdateStopAName)
+	collectDataUpdateStopBName = makeStopNameValid(collectDataUpdateStopBName)
+
 	for _, stop := range stops {
 		if stop.Name == collectDataUpdateStopAName {
 			stopA = stop

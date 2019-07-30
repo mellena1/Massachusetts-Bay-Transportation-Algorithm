@@ -16,10 +16,13 @@ import (
 
 const (
 	// EdgeDataFileDateFormat time format for the date to save to the EdgeData json files
-	EdgeDataFileDateFormat string        = "2006-01-02"
-	MaxDuration            time.Duration = time.Hour * 1000
+	EdgeDataFileDateFormat string = "2006-01-02"
+	// MaxDuration is a constant that holds the max a duration should be for us (1000 hours)
+	MaxDuration time.Duration = time.Hour * 1000
 )
 
+// allowedTransitLines these are the lines that the algorithm is allowed to use
+// this is to stop us from having the Google Maps API put us on a bus
 var allowedTransitLines = map[string]bool{
 	"Blue Line":        true,
 	"Red Line":         true,
@@ -169,7 +172,8 @@ func GetTransitDataWithGoogleAPI(startTime, endTime time.Time, interval time.Dur
 	}
 }
 
-// TODO: Finish
+// ReconstructRoute will print out all of the directions and times of each step
+// of the route
 func ReconstructRoute(route []Stop, startTime time.Time, apiKeyFile string) {
 	stops, err := ImportStopsFromFile(StopLocations)
 	if err != nil {
