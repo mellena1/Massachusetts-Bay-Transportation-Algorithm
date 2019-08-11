@@ -1,0 +1,136 @@
+{
+    "Boston College:Cleveland Circle": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Boston College:Riverside": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Boston College:Heath Street": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Boston College:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
+    },
+
+
+    "Cleveland Circle:Boston College": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Cleveland Circle:Riverside": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Cleveland Circle:Heath Street": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Cleveland Circle:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
+    },
+
+
+    "Riverside:Boston College": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Riverside:Cleveland Circle": {
+        "Stop": {
+            "name": "Kenmore"
+        }
+    },
+    "Riverside:Heath Street": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Riverside:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
+    },
+
+
+    "Heath Street:Boston College": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Heath Street:Cleveland Circle": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Heath Street:Riverside": {
+        "Stop": {
+            "name": "Copley"
+        }
+    },
+    "Heath Street:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        }
+    },
+    "Heath Street:Mattapan": {
+        "Stop": {
+            "name": "Park Street"
+        },
+        "no_walking": true
+    },
+
+
+    "Forest Hills:Boston College": {
+        "Stop": {
+            "name": "Park Street"
+        }
+    },
+    "Forest Hills:Cleveland Circle": {
+        "Stop": {
+            "name": "Park Street"
+        }
+    },
+    "Forest Hills:Riverside": {
+        "Stop": {
+            "name": "Park Street"
+        }
+    },
+    "Forest Hills:Heath Street": {
+        "Stop": {
+            "name": "Park Street"
+        }
+    },
+    "Forest Hills:Mattapan": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        },
+        "no_walking": true
+    },
+
+
+    "Mattapan:Heath Street": {
+        "Stop": {
+            "name": "Park Street"
+        },
+        "no_walking": true
+    },
+    "Mattapan:Forest Hills": {
+        "Stop": {
+            "name": "Downtown Crossing"
+        },
+        "no_walking": true
+    }
+}
